@@ -3,8 +3,8 @@ requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
-name = "f451-logger"
-description = "f451 Labs Logger module"
+name = "f451-common"
+description = "f451 Labs Common module"
 readme = "README.md"
 authors = [{name = "Martin Lanser", email = "martinlanser@gmail.com"}]
 license = {file = "LICENSE"}
@@ -13,7 +13,7 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3"
 ]
-keywords = ["logger", "f451"]
+keywords = ["common", "f451"]
 dependencies = [
     'tomli; python_version < "3.11"'
 ]
@@ -31,13 +31,13 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/mlanser/f451-logger"
+Homepage = "https://github.com/mlanser/f451-common"
 
 [project.scripts]
-f451_logger = "f451_logger.__main__:main"
+f451_common = "f451_common.__main__:main"
 
 [tool.bumpver]
-current_version = "1.0.0"
+current_version = "0.0.1"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 tag_message = "{new_version}"
@@ -50,5 +50,5 @@ push = false
 
 [tool.bumpver.file_patterns]
 "pyproject.toml" = ['current_version = "{version}"']
-"src/f451_logger/__init__.py" = ['__version__ = "{version}"']
+"src/f451_common/__init__.py" = ['__version__ = "{version}"']
 "README.md" = ['v{version}$']
