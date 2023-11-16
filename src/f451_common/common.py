@@ -1,17 +1,79 @@
-"""Helper Module for applications on the f451 Labs piENVIRO device.
+"""Helper module for f451 Labs applications.
 
-This module holds a few common helper functions that can be used across 
-most/all applications designed for the f451 Labs piENVIRO device.
+This module holds common helper functions and constants 
+that can be used across most/all f451 Labs applications.
 """
 
 import sys
 from subprocess import check_output, STDOUT, DEVNULL
-from . import constants as const
 
 try:
     import tomllib
 except ModuleNotFoundError:
     import tomli as tomllib
+
+__all__ = [
+    "load_settings",
+    "get_RPI_serial_num",
+    "get_RPI_ID",
+    "check_wifi",
+    "num_to_range",
+    "convert_to_rgb",
+    "convert_to_bool",
+    "DELIM_STD",
+    "DELIM_VAL",
+    "EMPTY_STR",
+    "DEF_ID_PREFIX",
+    "DEF_TEMP_COMP_FACTOR",
+    "MAX_LEN_CPU_TEMPS",
+    "LOG_NOTSET",
+    "LOG_DEBUG",
+    "LOG_INFO",
+    "LOG_WARNING",
+    "LOG_ERROR",
+    "LOG_CRITICAL",
+    "STATUS_YES",
+    "STATUS_ON",
+    "STATUS_TRUE",
+    "STATUS_NO",
+    "STATUS_OFF",
+    "STATUS_FALSE",
+    "STATUS_UNKNOWN",
+    "KWD_TEMP_COMP",
+    "KWD_MAX_LEN_CPU_TEMPS",
+]
+
+
+# =========================================================
+#              M I S C .   C O N S T A N T S
+# =========================================================
+DELIM_STD = "|"
+DELIM_VAL = ":"
+EMPTY_STR = ""
+
+DEF_ID_PREFIX = "raspi-"    # Default prefix for ID string
+
+# Tuning factor for compensation. Decrease this number to adjust the
+# temperature down, and increase to adjust up
+DEF_TEMP_COMP_FACTOR = 2.25
+MAX_LEN_CPU_TEMPS = 5       # Max number of CPU temps
+
+STATUS_YES = "yes"
+STATUS_ON = "on"
+STATUS_TRUE = "true"
+
+STATUS_NO = "no"
+STATUS_OFF = "off"
+STATUS_FALSE = "false"
+
+STATUS_UNKNOWN = "unknown"
+
+
+# =========================================================
+#    K E Y W O R D S   F O R   C O N F I G   F I L E S
+# =========================================================
+KWD_TEMP_COMP = "TEMP_COMP"
+KWD_MAX_LEN_CPU_TEMPS = "CPU_TEMPS"
 
 
 # =========================================================
@@ -179,6 +241,6 @@ def convert_to_bool(inVal):
     if isinstance(inVal, int) or isinstance(inVal, float):
         return (abs(int(inVal)) > 0)
     elif isinstance(inVal, str):
-        return (inVal.lower() in [const.STATUS_ON, const.STATUS_TRUE, const.STATUS_YES])
+        return (inVal.lower() in [STATUS_ON, STATUS_TRUE, STATUS_YES])
     else:
         return False

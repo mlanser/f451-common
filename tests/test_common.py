@@ -20,3 +20,6 @@ def test_debug(capsys, valid_str):
     print(valid_str)
     captured = capsys.readouterr()
     assert captured.out == "'Hello world'\n"
+
+
+
