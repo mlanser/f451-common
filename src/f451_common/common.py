@@ -238,7 +238,9 @@ def convert_to_bool(inVal):
         inVal:
             Value to be converted to boolean.
     """
-    if isinstance(inVal, int) or isinstance(inVal, float):
+    if isinstance(inVal, bool):
+        return inVal
+    elif isinstance(inVal, int) or isinstance(inVal, float):
         return (abs(int(inVal)) > 0)
     elif isinstance(inVal, str):
         return (inVal.lower() in [STATUS_ON, STATUS_TRUE, STATUS_YES])
