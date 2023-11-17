@@ -25,7 +25,7 @@ def test_debug(capsys, valid_str):
 
 def test_load_settings():
     APP_DIR = Path(__file__).parent         # Find dir for this app
-    settings = common.load_settings(APP_DIR.joinpath("settings.toml"))
+    settings = common.load_settings(APP_DIR.joinpath("test.toml"))
     assert settings.get("FOO") == "bar"
 
 
