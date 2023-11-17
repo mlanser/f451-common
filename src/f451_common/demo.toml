@@ -1,0 +1,10 @@
+# =========================================================
+#                S E T T I N G S . T O M L
+# ---------------------------------------------------------
+# Please see README.md for instructions on how to use 
+# these settings and their effects
+# =========================================================
+
+FOO = "bar"
+ONE = 1
+TWO = "two"
