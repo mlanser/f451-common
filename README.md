@@ -13,8 +13,8 @@ This module is not (yet) available on PyPi. however, you can still use `pip` to 
 
 This module is dependent on the following libraries:
 
-- [???](https://example.com)
-- [???](https://example.com)
+- [tomli](https://pypi.org/project/tomli/) for Python < 3.11
+- [tomllib](https://docs.python.org/3/library/tomllib.html) for Python >= 3.11
 
 ### Installing from Github using `pip`
 
@@ -43,7 +43,7 @@ from f451_common.common import some_function, some_variable, some_constant
 myVar = some_function()
 
 # Import all components f451 Labs Common module
-import f451_common
+import f451_common.common as f451Common
 
-myVar = f451_common.common.some_function()
+myVar = f451Common.some_function()
 ```
