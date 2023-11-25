@@ -154,7 +154,7 @@ def check_wifi():
 
 
 def num_to_range(num, inMin, inMax, outMin, outMax):
-    """Map value to range
+    """Map numeric value to range
 
     We use this function to map values (e.g. temp, etc.) against the Y-axis of 
     the SenseHat 8x8 LED display. This means that all values must be mapped 
@@ -181,8 +181,7 @@ def num_to_range(num, inMin, inMax, outMin, outMax):
 
 
 def convert_to_rgb(num, inMin, inMax, colors):
-    """
-    Map a value to RGB
+    """Map numeric value to RGB
 
     Based on reply found on StackOverflow by `martineau`: 
 

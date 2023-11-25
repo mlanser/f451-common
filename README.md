@@ -47,3 +47,13 @@ import f451_common.common as f451Common
 
 myVar = f451Common.some_function()
 ```
+
+## Core functions
+
+- **load_settings()** — Initialize TOML parser and load settings file.
+- **get_RPI_serial_num()** — Get Raspberry Pi serial number.
+- **get_RPI_ID()** — Get Raspberry Pi ID. Also allows for additional pre- and/or suffix.
+- **check_wifi()** — Check for Wi-Fi connection on Raspberry Pi.
+- **num_to_range()** — Map numeric value to range.
+- **convert_to_rgb()** — Map numeric value to RGB.
+- **convert_to_bool()** — Convert value to boolean. Mainly used for config strings (e.g. "yes", "true", "on", etc.)
