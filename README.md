@@ -13,6 +13,7 @@ This module is not (yet) available on PyPi. however, you can still use `pip` to 
 
 This module is dependent on the following libraries:
 
+- [pyfiglet](https://pypi.org/project/pyfiglet/)
 - [tomli](https://pypi.org/project/tomli/) for Python < 3.11
 - [tomllib](https://docs.python.org/3/library/tomllib.html) for Python >= 3.11
 
@@ -57,3 +58,4 @@ myVar = f451Common.some_function()
 - **num_to_range()** — Map numeric value to range.
 - **convert_to_rgb()** — Map numeric value to RGB.
 - **convert_to_bool()** — Convert value to boolean. Mainly used for config strings (e.g. "yes", "true", "on", etc.)
+- **make_logo()** — Create fancy logo for CLI apps. This function uses the 'pyfiglet' library and the 'slant' font to create multi-line ASCII-art logos ... you're welcome! 🤓
