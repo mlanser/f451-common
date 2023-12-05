@@ -15,7 +15,8 @@ classifiers = [
 ]
 keywords = ["common", "f451"]
 dependencies = [
-    'tomli; python_version < "3.11"'
+    "tomli; python_version < '3.11'",
+    "pyfiglet"
 ]
 requires-python = ">=3.9"
 dynamic = ["version"]

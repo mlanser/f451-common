@@ -6,6 +6,7 @@ that can be used across most/all f451 Labs applications.
 
 import sys
 from subprocess import check_output, STDOUT, DEVNULL
+from pyfiglet import Figlet
 
 try:
     import tomllib
@@ -20,6 +21,7 @@ __all__ = [
     "num_to_range",
     "convert_to_rgb",
     "convert_to_bool",
+    "make_logo",
     "DELIM_STD",
     "DELIM_VAL",
     "EMPTY_STR",
@@ -245,3 +247,45 @@ def convert_to_bool(inVal):
         return (inVal.lower() in [STATUS_ON, STATUS_TRUE, STATUS_YES])
     else:
         return False
+
+
+def make_logo(maxWidth, appName, appVer, default=None, center=True):
+    """Create a fancy logo using pyFiglet
+
+    This will create a fancy multi-line ASCII-ized logo
+    using pyFiglet library and 'slant' font. We'll also
+    add in the version number on the last row, and we'll
+    center the logo if theres enough space.
+
+    If there is not enough space for  abig logo, then we
+    can return a default string instead.
+
+    Args:
+        maxWidth:
+            'int' max length of any row in the logo (usually console width)
+        appName:
+            'str' application name to use for logo
+        appVer:
+            'str' application version number. We'll prefix it with a 'v'
+        default:
+            'str' default string if space is too tight
+        center:
+            'bool' if True, then we'll 'center' logo lines within available space
+
+    Returns:
+        'str' with logo. A multiline-logo will have '\n' embedded                    
+    """
+    logoFont = Figlet(font='slant')
+    logoStrArr = logoFont.renderText(appName).splitlines()
+    logoLen = max([len(s) for s in logoStrArr])
+
+    result = default
+
+    if logoLen < maxWidth:
+        lastCharPos = logoStrArr[-2].rfind('/')
+        deltaStrLen = len(logoStrArr[-2]) - lastCharPos if lastCharPos >= 0 else len(logoStrArr[-2]) - len(appVer)
+        logoStrArr[-1] = logoStrArr[-1][:-(len(appVer) + deltaStrLen)] + appVer + (' ' * deltaStrLen)
+        newLogo = [s.center(maxWidth, ' ').rstrip() for s in logoStrArr] if center else logoStrArr
+        result = "\n".join(newLogo)
+
+    return result

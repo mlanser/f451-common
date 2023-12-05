@@ -11,7 +11,18 @@ def main():
     settingsFile = "demo.toml"
     settings = f451Common.load_settings(APP_DIR.joinpath(settingsFile))
 
-    print("\n====== [Demo of f451 Labs Common module] ======")
+    print("\n====== [Demo of f451 Labs Common module] ======\n")
+
+    print(f451Common.make_logo(
+            40, 
+            "Test", 
+            "v0.0.0", 
+            "Test (v0.0.0)"
+        )
+    )
+
+    print("\n-----------------------------------------------\n")
+    
     print(f"Reading values from '{settingsFile}' file:\n")
     for k, v in settings.items():
         print(f"  {k} = {v}")
