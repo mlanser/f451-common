@@ -35,10 +35,10 @@ def test_get_RPI_ID():
 
 
 def test_num_to_range():
-    val = common.num_to_range(10, 0, 100, 0, 100)
+    val = common.num_to_range(10, (0, 100), (0, 100))
     assert val == 10.0
 
-    val = common.num_to_range(10, 0, 100, 0, 10)
+    val = common.num_to_range(10, (0, 100), (0, 10))
     assert val == 1.0
 
 

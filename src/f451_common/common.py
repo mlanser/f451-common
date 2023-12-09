@@ -155,31 +155,39 @@ def check_wifi():
     return True if result is not None else False
 
 
-def num_to_range(num, inMin, inMax, outMin, outMax):
+def num_to_range(num, inMinMax, outMinMax):
     """Map numeric value to range
 
-    We use this function to map values (e.g. temp, etc.) against the Y-axis of 
-    the SenseHat 8x8 LED display. This means that all values must be mapped 
-    against a range of 0-7.
+    We use this function to map values (e.g. temp, etc.) against the a limited range 
+    of values.
+    
+    For example, the Y-axis of the SenseHat 8x8 LED display has only 8 LEDs,
+    which means that all values must be mapped against a range of 0-8 where we use
+    0 for "off" and 1-8 to light up the corresponding LED.
+
+    Another example is the 'Sparklines' library which uses 8 different characters to
+    create sparkline graphs in the terminal. Here too we map against a range of 0-8.
 
     Based on code found here: https://www.30secondsofcode.org/python/s/num-to-range/
 
     Args:
         num:
             Number to map against range
-        inMin:
-            Min value of range for numbers to be converted
-        inMax:
-            Max value of range for numbers to be converted
-        outMin:
-            Min value of target range
-        outMax:
-            Max value of target range
+        inMinMax:
+            'tuple' with min/max values of range for numbers to be converted
+        outMinMax:
+            'tuple' with min/max value of target range
 
     Returns:
         'float'
     """
-    return outMin + (float(num - inMin) / float(inMax - inMin) * (outMax - outMin))
+    if inMinMax[0] > inMinMax[1]:
+        raise ValueError(f"Invalid 'inMinMax' values: ({inMinMax[0]},{inMinMax[1]})")
+
+    if outMinMax[0] > outMinMax[1]:
+        raise ValueError(f"Invalid 'outMinMax' values: ({outMinMax[0]},{outMinMax[1]})")
+
+    return outMinMax[0] + (float(num - inMinMax[0]) / float(inMinMax[1] - inMinMax[0]) * (outMinMax[1] - outMinMax[0]))
 
 
 def convert_to_rgb(num, inMin, inMax, colors):
