@@ -42,29 +42,43 @@ def test_num_to_range():
     assert val == 1.0
 
     val = common.num_to_range(10, (10, 10), (0, 10))
-    assert val == 1.0
+    assert val == 0.0
 
     val = common.num_to_range(10, (0, 100), (10, 10))
-    assert val == 1.0
+    assert val == 10.0
 
     val = common.num_to_range(10, (10, 10), (10, 10))
-    assert val == 1.0
-
-    val = common.num_to_range(50, (60, 100), (0, 100))
-    assert val == 60.0
-
-    val = common.num_to_range(50, (10, 40), (0, 100))
-    assert val == 40.0
+    assert val == 10.0
 
 
 @pytest.mark.parametrize("data_in_range",[i for i in range(100)])
-def test_num_to_range(data_in_range):
+def test_num_to_range_multi(data_in_range):
     val = common.num_to_range(data_in_range, (0, 100), (0, 100))
     assert round(val, 1) == float(data_in_range)
 
     val = common.num_to_range(10, (0, 100), (0, 10))
     assert val >= 0.0
     assert val <= 10
+
+
+def test_num_to_range_out_of_bounds():
+    val = common.num_to_range(None, (0, 100), (0, 100), True)
+    assert val == 0.0
+
+    val = common.num_to_range(None, (0, 100), (0, 100), False)
+    assert val == None
+
+    val = common.num_to_range(9, (10, 20), (0, 100), True)
+    assert val == 0.0
+
+    val = common.num_to_range(21, (10, 20), (0, 100), True)
+    assert val == 100.0
+
+    val = common.num_to_range(9, (10, 20), (0, 100), False)
+    assert val == None
+
+    val = common.num_to_range(21, (10, 20), (0, 100), False)
+    assert val == None
 
 
 def test_convert_to_bool():

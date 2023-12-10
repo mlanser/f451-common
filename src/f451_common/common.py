@@ -155,7 +155,7 @@ def check_wifi():
     return True if result is not None else False
 
 
-def num_to_range(num, inMinMax, outMinMax, force=True):
+def num_to_range(num, inMinMax, outMinMax, force=False):
     """Map numeric value to range
 
     We use this function to map values (e.g. temp, etc.) against the a limited range 
@@ -178,11 +178,14 @@ def num_to_range(num, inMinMax, outMinMax, force=True):
         outMinMax:
             'tuple' with min/max value of target range
         force:
-            'bool' if 'True' then any 'num' outside 'inMinMax' will be adjusted 
-            to stay in range. If too small, then it's set to min, and if too large, 
-            it'll be set to max.
+            'bool' if 'True' then any 'num' outside 'inMinMax' and any 'None" value will 
+            be adjusted to stay in range. If too small (or 'None'), then it'll be set to 
+            min, and if too large, it'll be set to max.
+
+            If 'False', then any 'None' will remain 'None' and any out-of-bound value 
+            will be set to 'None' as well.
     Returns:
-        'float'
+        'float' if valid or 'None' if missing/invalid
     """
     if inMinMax[0] > inMinMax[1]:
         raise ValueError(f"Invalid 'inMinMax' values: ({inMinMax[0]},{inMinMax[1]})")
@@ -193,10 +196,17 @@ def num_to_range(num, inMinMax, outMinMax, force=True):
     deltaInMinMax = (inMinMax[1] - inMinMax[0]) if inMinMax[1] != inMinMax[0] else 1
     deltaOutMinMax = (outMinMax[1] - outMinMax[0]) if outMinMax[1] != outMinMax[0] else 1
 
-    if force and (num < inMinMax[0] or num > inMinMax[1]):
-        num = min(max(num, inMinMax[0]), inMinMax[1])
+    if num is None:
+        num = inMinMax[0] if force else None
 
-    return outMinMax[0] + (float(num - inMinMax[0]) / float(deltaInMinMax) * float(deltaOutMinMax))
+    elif (num < inMinMax[0] or num > inMinMax[1]):
+        num = min(max(num, inMinMax[0]), inMinMax[1]) if force else None
+
+    if num is None:
+        return None 
+    
+    val = outMinMax[0] + (float(num - inMinMax[0]) / float(deltaInMinMax) * float(deltaOutMinMax))
+    return float(max(min(val, outMinMax[1]), outMinMax[0]))
 
 
 def convert_to_rgb(num, inMin, inMax, colors):
