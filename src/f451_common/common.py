@@ -155,7 +155,7 @@ def check_wifi():
     return True if result is not None else False
 
 
-def num_to_range(num, inMinMax, outMinMax):
+def num_to_range(num, inMinMax, outMinMax, force=True):
     """Map numeric value to range
 
     We use this function to map values (e.g. temp, etc.) against the a limited range 
@@ -177,7 +177,10 @@ def num_to_range(num, inMinMax, outMinMax):
             'tuple' with min/max values of range for numbers to be converted
         outMinMax:
             'tuple' with min/max value of target range
-
+        force:
+            'bool' if 'True' then any 'num' outside 'inMinMax' will be adjusted 
+            to stay in range. If too small, then it's set to min, and if too large, 
+            it'll be set to max.
     Returns:
         'float'
     """
@@ -187,7 +190,13 @@ def num_to_range(num, inMinMax, outMinMax):
     if outMinMax[0] > outMinMax[1]:
         raise ValueError(f"Invalid 'outMinMax' values: ({outMinMax[0]},{outMinMax[1]})")
 
-    return outMinMax[0] + (float(num - inMinMax[0]) / float(inMinMax[1] - inMinMax[0]) * (outMinMax[1] - outMinMax[0]))
+    deltaInMinMax = (inMinMax[1] - inMinMax[0]) if inMinMax[1] != inMinMax[0] else 1
+    deltaOutMinMax = (outMinMax[1] - outMinMax[0]) if outMinMax[1] != outMinMax[0] else 1
+
+    if force and (num < inMinMax[0] or num > inMinMax[1]):
+        num = min(max(num, inMinMax[0]), inMinMax[1])
+
+    return outMinMax[0] + (float(num - inMinMax[0]) / float(deltaInMinMax) * float(deltaOutMinMax))
 
 
 def convert_to_rgb(num, inMin, inMax, colors):
