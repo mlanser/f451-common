@@ -5,7 +5,7 @@ that can be used across most/all f451 Labs applications.
 """
 
 import sys
-from subprocess import check_output, STDOUT, DEVNULL
+from subprocess import check_output, STDOUT, DEVNULL  # noqa: F401
 from pyfiglet import Figlet
 
 try:
@@ -13,69 +13,63 @@ try:
 except ModuleNotFoundError:
     import tomli as tomllib
 
-__all__ = [
-    "load_settings",
-    "get_RPI_serial_num",
-    "get_RPI_ID",
-    "check_wifi",
-    "num_to_range",
-    "convert_to_rgb",
-    "convert_to_bool",
-    "make_logo",
-    "DELIM_STD",
-    "DELIM_VAL",
-    "EMPTY_STR",
-    "DEF_ID_PREFIX",
-    "DEF_TEMP_COMP_FACTOR",
-    "MAX_LEN_CPU_TEMPS",
-    "LOG_NOTSET",
-    "LOG_DEBUG",
-    "LOG_INFO",
-    "LOG_WARNING",
-    "LOG_ERROR",
-    "LOG_CRITICAL",
-    "STATUS_YES",
-    "STATUS_ON",
-    "STATUS_TRUE",
-    "STATUS_NO",
-    "STATUS_OFF",
-    "STATUS_FALSE",
-    "STATUS_UNKNOWN",
-    "KWD_TEMP_COMP",
-    "KWD_MAX_LEN_CPU_TEMPS",
+__all__ = [  # noqa: F822
+    'load_settings',
+    'get_RPI_serial_num',
+    'get_RPI_ID',
+    'check_wifi',
+    'num_to_range',
+    'convert_to_rgb',
+    'convert_to_bool',
+    'make_logo',
+    'DELIM_STD',
+    'DELIM_VAL',
+    'EMPTY_STR',
+    'DEF_ID_PREFIX',
+    'DEF_TEMP_COMP_FACTOR',
+    'MAX_LEN_CPU_TEMPS',
+    'STATUS_YES',
+    'STATUS_ON',
+    'STATUS_TRUE',
+    'STATUS_NO',
+    'STATUS_OFF',
+    'STATUS_FALSE',
+    'STATUS_UNKNOWN',
+    'KWD_TEMP_COMP',
+    'KWD_MAX_LEN_CPU_TEMPS',
 ]
 
 
 # =========================================================
 #              M I S C .   C O N S T A N T S
 # =========================================================
-DELIM_STD = "|"
-DELIM_VAL = ":"
-EMPTY_STR = ""
+DELIM_STD = '|'
+DELIM_VAL = ':'
+EMPTY_STR = ''
 
-DEF_ID_PREFIX = "raspi-"    # Default prefix for ID string
+DEF_ID_PREFIX = 'raspi-'  # Default prefix for ID string
 
 # Tuning factor for compensation. Decrease this number to adjust the
 # temperature down, and increase to adjust up
 DEF_TEMP_COMP_FACTOR = 2.25
-MAX_LEN_CPU_TEMPS = 5       # Max number of CPU temps
+MAX_LEN_CPU_TEMPS = 5  # Max number of CPU temps
 
-STATUS_YES = "yes"
-STATUS_ON = "on"
-STATUS_TRUE = "true"
+STATUS_YES = 'yes'
+STATUS_ON = 'on'
+STATUS_TRUE = 'true'
 
-STATUS_NO = "no"
-STATUS_OFF = "off"
-STATUS_FALSE = "false"
+STATUS_NO = 'no'
+STATUS_OFF = 'off'
+STATUS_FALSE = 'false'
 
-STATUS_UNKNOWN = "unknown"
+STATUS_UNKNOWN = 'unknown'
 
 
 # =========================================================
 #    K E Y W O R D S   F O R   C O N F I G   F I L E S
 # =========================================================
-KWD_TEMP_COMP = "TEMP_COMP"
-KWD_MAX_LEN_CPU_TEMPS = "CPU_TEMPS"
+KWD_TEMP_COMP = 'TEMP_COMP'
+KWD_MAX_LEN_CPU_TEMPS = 'CPU_TEMPS'
 
 
 # =========================================================
@@ -88,14 +82,14 @@ def load_settings(settingsFile):
         settingsFile: path object or string with filename
 
     Returns:
-        'dict' with values from TOML file 
+        'dict' with values from TOML file
     """
     try:
-        with open(settingsFile, mode="rb") as fp:
+        with open(settingsFile, mode='rb') as fp:
             settings = tomllib.load(fp)
 
     except (FileNotFoundError, tomllib.TOMLDecodeError):
-        sys.exit(f"Missing or invalid file: '{settingsFile}'")      
+        sys.exit(f"Missing or invalid file: '{settingsFile}'")
 
     else:
         return settings
@@ -103,7 +97,7 @@ def load_settings(settingsFile):
 
 def get_RPI_serial_num():
     """Get Raspberry Pi serial number
-    
+
     Based on code from Enviro+ example 'luftdaten_combined.py'
 
     Returns:
@@ -113,12 +107,12 @@ def get_RPI_serial_num():
         with open('/proc/cpuinfo', 'r') as f:
             for line in f:
                 if line[0:6] == 'Serial':
-                    return line.split(":")[1].strip()
+                    return line.split(':')[1].strip()
     except OSError:
         return None
 
 
-def get_RPI_ID(prefix="", suffix="", default="n/a"):
+def get_RPI_ID(prefix='', suffix='', default='n/a'):
     """Get Raspberry Pi ID
 
     Returns a string with RPI ID (i.e. serial num with pre- and suffix).
@@ -127,12 +121,12 @@ def get_RPI_ID(prefix="", suffix="", default="n/a"):
         prefix: optional prefix
         suffix: optional suffix
         default: optional default string to be returned if no serial num
-    
+
     Returns:
         'str' with RPI ID
     """
     serialNum = get_RPI_serial_num()
-    
+
     return f"{prefix}{serialNum}{suffix}" if serialNum else default
 
 
@@ -148,7 +142,7 @@ def check_wifi():
         'False' - status unknown
     """
     try:
-        result = check_output(['hostname', '-I'], stdout=DEVNULL, stderr=STDOUT)
+        result = check_output(['hostname', '-I'], stderr=DEVNULL)
     except Exception:
         result = None
 
@@ -158,9 +152,9 @@ def check_wifi():
 def num_to_range(num, inMinMax, outMinMax, force=False):
     """Map numeric value to range
 
-    We use this function to map values (e.g. temp, etc.) against the a limited range 
+    We use this function to map values (e.g. temp, etc.) against the a limited range
     of values.
-    
+
     For example, the Y-axis of the SenseHat 8x8 LED display has only 8 LEDs,
     which means that all values must be mapped against a range of 0-8 where we use
     0 for "off" and 1-8 to light up the corresponding LED.
@@ -178,11 +172,11 @@ def num_to_range(num, inMinMax, outMinMax, force=False):
         outMinMax:
             'tuple' with min/max value of target range
         force:
-            'bool' if 'True' then any 'num' outside 'inMinMax' and any 'None" value will 
-            be adjusted to stay in range. If too small (or 'None'), then it'll be set to 
+            'bool' if 'True' then any 'num' outside 'inMinMax' and any 'None" value will
+            be adjusted to stay in range. If too small (or 'None'), then it'll be set to
             min, and if too large, it'll be set to max.
 
-            If 'False', then any 'None' will remain 'None' and any out-of-bound value 
+            If 'False', then any 'None' will remain 'None' and any out-of-bound value
             will be set to 'None' as well.
     Returns:
         'float' if valid or 'None' if missing/invalid
@@ -199,12 +193,12 @@ def num_to_range(num, inMinMax, outMinMax, force=False):
     if num is None:
         num = inMinMax[0] if force else None
 
-    elif (num < inMinMax[0] or num > inMinMax[1]):
+    elif num < inMinMax[0] or num > inMinMax[1]:
         num = min(max(num, inMinMax[0]), inMinMax[1]) if force else None
 
     if num is None:
-        return None 
-    
+        return None
+
     val = outMinMax[0] + (float(num - inMinMax[0]) / float(deltaInMinMax) * float(deltaOutMinMax))
     return float(max(min(val, outMinMax[1]), outMinMax[0]))
 
@@ -212,7 +206,7 @@ def num_to_range(num, inMinMax, outMinMax, force=False):
 def convert_to_rgb(num, inMin, inMax, colors):
     """Map numeric value to RGB
 
-    Based on reply found on StackOverflow by `martineau`: 
+    Based on reply found on StackOverflow by `martineau`:
 
     See: https://stackoverflow.com/questions/20792445/calculate-rgb-value-for-a-range-of-values-to-create-heat-map
 
@@ -224,13 +218,13 @@ def convert_to_rgb(num, inMin, inMax, colors):
         inMax:
             Max value of range for numbers to be converted
         colors:
-            series of RGB colors delineating a series of adjacent 
+            series of RGB colors delineating a series of adjacent
             linear color gradients.
 
     Returns:
         'tuple' with RGB value
     """
-    EPSILON = sys.float_info.epsilon    # Smallest possible difference
+    EPSILON = sys.float_info.epsilon  # Smallest possible difference
 
     # Determine where the given value falls proportionality within
     # the range from inMin->inMax and scale that fractional value
@@ -245,22 +239,22 @@ def convert_to_rgb(num, inMin, inMax, colors):
     # Does it fall exactly on one of the color points?
     if f < EPSILON:
         return colors[i]
-    
-    # ... if not, then return a color linearly interpolated in the 
+
+    # ... if not, then return a color linearly interpolated in the
     # range between it and the following one.
     else:
-        (r1, g1, b1), (r2, g2, b2) = colors[i], colors[i+1]
+        (r1, g1, b1), (r2, g2, b2) = colors[i], colors[i + 1]
         return int(r1 + f * (r2 - r1)), int(g1 + f * (g2 - g1)), int(b1 + f * (b2 - b1))
 
 
 def convert_to_bool(inVal):
     """Convert value to boolean.
 
-    If value is a string, then we check against predefined string 
+    If value is a string, then we check against predefined string
     constants. If value is an integer, then we return 'True' if value
     is greater than 0 (zero).
 
-    For anything else we return a 'False'. 
+    For anything else we return a 'False'.
 
     Args:
         inVal:
@@ -269,9 +263,9 @@ def convert_to_bool(inVal):
     if isinstance(inVal, bool):
         return inVal
     elif isinstance(inVal, int) or isinstance(inVal, float):
-        return (abs(int(inVal)) > 0)
+        return abs(int(inVal)) > 0
     elif isinstance(inVal, str):
-        return (inVal.lower() in [STATUS_ON, STATUS_TRUE, STATUS_YES])
+        return inVal.lower() in [STATUS_ON, STATUS_TRUE, STATUS_YES]
     else:
         return False
 
@@ -300,7 +294,7 @@ def make_logo(maxWidth, appName, appVer, default=None, center=True):
             'bool' if True, then we'll 'center' logo lines within available space
 
     Returns:
-        'str' with logo. A multiline-logo will have '\n' embedded                    
+        'str' with logo. A multiline-logo will have '\n' embedded
     """
     logoFont = Figlet(font='slant')
     logoStrArr = logoFont.renderText(appName).splitlines()
@@ -310,9 +304,15 @@ def make_logo(maxWidth, appName, appVer, default=None, center=True):
 
     if logoLen < maxWidth:
         lastCharPos = logoStrArr[-2].rfind('/')
-        deltaStrLen = len(logoStrArr[-2]) - lastCharPos if lastCharPos >= 0 else len(logoStrArr[-2]) - len(appVer)
-        logoStrArr[-1] = logoStrArr[-1][:-(len(appVer) + deltaStrLen)] + appVer + (' ' * deltaStrLen)
+        deltaStrLen = (
+            len(logoStrArr[-2]) - lastCharPos
+            if lastCharPos >= 0
+            else len(logoStrArr[-2]) - len(appVer)
+        )
+        logoStrArr[-1] = (
+            logoStrArr[-1][: -(len(appVer) + deltaStrLen)] + appVer + (' ' * deltaStrLen)
+        )
         newLogo = [s.center(maxWidth, ' ').rstrip() for s in logoStrArr] if center else logoStrArr
-        result = "\n".join(newLogo)
+        result = '\n'.join(newLogo)
 
     return result
