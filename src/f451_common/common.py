@@ -2,9 +2,13 @@
 
 This module holds common helper functions and constants 
 that can be used across most/all f451 Labs applications.
+
+TODO:
+ - how to get 'hostname' for device we're running on
 """
 
 import sys
+from collections import namedtuple
 from subprocess import check_output, STDOUT, DEVNULL  # noqa: F401
 from pyfiglet import Figlet
 
@@ -14,7 +18,11 @@ except ModuleNotFoundError:
     import tomli as tomllib
 
 __all__ = [  # noqa: F822
+    'is_valid',
+    'is_in_range',
+    'get_delta_range',
     'load_settings',
+    'get_tri_colors',
     'get_RPI_serial_num',
     'get_RPI_ID',
     'check_wifi',
@@ -22,6 +30,10 @@ __all__ = [  # noqa: F822
     'convert_to_rgb',
     'convert_to_bool',
     'make_logo',
+    'COLOR_MAP',
+    'COLOR_LOW',
+    'COLOR_NORM',
+    'COLOR_HIGH',
     'DELIM_STD',
     'DELIM_VAL',
     'EMPTY_STR',
@@ -39,7 +51,7 @@ __all__ = [  # noqa: F822
     'KWD_MAX_LEN_CPU_TEMPS',
 ]
 
-
+# fmt: off
 # =========================================================
 #              M I S C .   C O N S T A N T S
 # =========================================================
@@ -64,6 +76,35 @@ STATUS_FALSE = 'false'
 
 STATUS_UNKNOWN = 'unknown'
 
+# =========================================================
+#            C O L O R   M A P   C O N S T A N T S
+# =========================================================
+# This color map can be used for misc. sensor data. The goal 
+# is to provide 5 colors that can indicate how a given value
+# relates to the limits of a data set.
+# 
+# The set of limits for f451 Labs applications has 4 values.
+# A limit set [A, B, C, D] means:
+#
+#             val <= A -> Dangerously Low   = "red"
+#        B >= val >  A -> Low               = "yellow"
+#        C >= val >  B -> Normal            = "green"
+#        D >= val >  C -> High              = "cyan"
+#             val >  D -> Dangerously High  = "blue"
+#
+COLOR_MAP = [
+    'red',              # 0  -- These colors must also work
+    'yellow',           # 1     with 'termcolor' library
+    'green',            # 2
+    'cyan',             # 3
+    'blue',             # 4
+]
+# Shortcuts for indicating main colors
+COLOR_LOW = 0
+COLOR_NORM = 2
+COLOR_HIGH = 4
+# fmt: on
+
 
 # =========================================================
 #    K E Y W O R D S   F O R   C O N F I G   F I L E S
@@ -75,6 +116,92 @@ KWD_MAX_LEN_CPU_TEMPS = 'CPU_TEMPS'
 # =========================================================
 #          G L O B A L S   A N D   H E L P E R S
 # =========================================================
+def get_tri_colors(colors=None):
+    TriColor = namedtuple("TriColor", "low normal high")
+
+    colorMap = COLOR_MAP if colors is None else colors
+
+    return TriColor(colorMap[COLOR_LOW], colorMap[COLOR_NORM], colorMap[COLOR_HIGH])
+
+
+def is_valid(val, valid):
+    """Verify value 'valid'
+
+    We know what 'valid' ranges are for each sensor.
+    This method allows us to verify that a given
+    value falls within that range. Any value outside
+    the range should be considered an error.
+
+    Args:
+        val: value to check
+        valid: 'tuple' with min/max values for valid range
+
+    Returns:
+        'True' if value is valid, else 'False'
+    """
+    if val is not None and valid is not None:
+        return float(val) >= float(valid[0]) and float(val) <= float(valid[1])
+
+    return False
+
+
+def is_in_range(first, second, factor):
+    """Check if 1st value is within X% of 2nd value
+
+    This method allows us to check if a value falls 
+    within a given range..
+
+    Args:
+        first: value to compare
+        second: value to compare against
+        factor: factor to extend range for comparison
+
+    Returns:
+        'True' if value is in range, else 'False'
+    """
+    # If either value is 'None' then we'll assume that
+    # there is 'no change' ... 'coz we can't compare
+    if first is None or second is None:
+        return True
+
+    lower = second * (1 - factor)
+    upper = second * (1 + factor)
+
+    return is_valid(first, (lower, upper))
+
+
+def get_delta_range(first, second, factor):
+    """Check if 1st value is within X% of 2nd value
+
+    This method allows us to compare 2 values to see
+    if they're equal-ish, and we can use this to even
+    out minor deviations between sensor readings.
+
+    Args:
+        first: value to compare
+        second: value to compare against
+        factor: factor to extend range for comparison
+
+    Returns:
+        1: above range
+        0: within range
+        -1: below range
+    """
+    # If either value is 'None' then we have to
+    # assume 'no change' ... 'coz we can't compare
+    if first is None or second is None:
+        return 0
+
+    lower = second * (1 - factor)
+    upper = second * (1 + factor)
+    if float(first) > upper:  # Above range
+        return 1
+    elif float(first) < lower:  # Below range
+        return -1
+    else:
+        return 0  # Within range
+
+
 def load_settings(settingsFile):
     """Initialize TOML parser and load settings file
 
