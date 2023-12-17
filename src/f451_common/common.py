@@ -132,6 +132,11 @@ def is_valid(val, valid):
     value falls within that range. Any value outside
     the range should be considered an error.
 
+    NOTE: If 'valid' is 'None' or '(None, None)', then we 
+          assume that any value is valid. However, if 
+          one or both items in the 'valid' tuple are not
+          'None', then we'll compare aaginst that item.
+
     Args:
         val: value to check
         valid: 'tuple' with min/max values for valid range
@@ -139,8 +144,17 @@ def is_valid(val, valid):
     Returns:
         'True' if value is valid, else 'False'
     """
-    if val is not None and valid is not None:
-        return float(val) >= float(valid[0]) and float(val) <= float(valid[1])
+    if valid is None or not all(valid):
+        return True
+    
+    if val is not None and any(valid):
+        isValid = True
+        if valid[0] is not None:
+            isValid &= (float(val) >= float(valid[0]))
+        if valid[1] is not None:
+            isValid &= (float(val) <= float(valid[1]))
+        
+        return isValid
 
     return False
 
