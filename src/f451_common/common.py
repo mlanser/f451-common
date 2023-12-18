@@ -30,6 +30,7 @@ __all__ = [  # noqa: F822
     'convert_to_rgb',
     'convert_to_bool',
     'make_logo',
+    'Runtime',
     'COLOR_MAP',
     'COLOR_LOW',
     'COLOR_NORM',
@@ -114,7 +115,35 @@ KWD_MAX_LEN_CPU_TEMPS = 'CPU_TEMPS'
 
 
 # =========================================================
-#          G L O B A L S   A N D   H E L P E R S
+#                 H E L P E R   C L A S S
+# =========================================================
+class Runtime:
+    def __init__(self, ioFreq=0, ioDelay=0, ioWait=0, ioThrottle=0, ioRounding=0):
+        # Core settings
+        self.ioFreq = ioFreq
+        self.ioDelay = ioDelay
+        self.ioWait = ioWait
+        self.ioThrottle = ioThrottle
+        self.ioRounding = ioRounding
+        self.ioUploadAndExit = False
+
+        # Debug and log levels
+        self.logLvl = 0
+        self.debugMode = False
+
+        # Core runtime variables
+        self.timeSinceUpdate = float(0)
+        self.timeUpdate = float(0)
+        self.displayUpdate = float(0)
+        self.uploadDelay = 0
+        self.maxUploads = 0
+        self.numUploads = 0
+
+        self.console = None
+
+
+# =========================================================
+#              H E L P E R   F U N C T I O N S
 # =========================================================
 def get_tri_colors(colors=None):
     TriColor = namedtuple("TriColor", "low normal high")
@@ -247,7 +276,7 @@ def get_RPI_serial_num():
     try:
         with open('/proc/cpuinfo', 'r') as f:
             for line in f:
-                if line[0:6] == 'Serial':
+                if line[:6] == 'Serial':
                     return line.split(':')[1].strip()
     except OSError:
         return None
@@ -287,7 +316,7 @@ def check_wifi():
     except Exception:
         result = None
 
-    return True if result is not None else False
+    return result is not None
 
 
 def num_to_range(num, inMinMax, outMinMax, force=False):
@@ -383,9 +412,8 @@ def convert_to_rgb(num, inMin, inMax, colors):
 
     # ... if not, then return a color linearly interpolated in the
     # range between it and the following one.
-    else:
-        (r1, g1, b1), (r2, g2, b2) = colors[i], colors[i + 1]
-        return int(r1 + f * (r2 - r1)), int(g1 + f * (g2 - g1)), int(b1 + f * (b2 - b1))
+    (r1, g1, b1), (r2, g2, b2) = colors[i], colors[i + 1]
+    return int(r1 + f * (r2 - r1)), int(g1 + f * (g2 - g1)), int(b1 + f * (b2 - b1))
 
 
 def convert_to_bool(inVal):
