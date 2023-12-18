@@ -1,4 +1,4 @@
-# f451 Labs Common module v2.0.5
+# f451 Labs Common module v2.0.6
 
 ## Overview
 
