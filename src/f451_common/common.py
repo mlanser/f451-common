@@ -153,7 +153,7 @@ def get_tri_colors(colors=None):
     return TriColor(colorMap[COLOR_LOW], colorMap[COLOR_NORM], colorMap[COLOR_HIGH])
 
 
-def is_valid(val, valid):
+def is_valid(val, valid, allowNone=True):
     """Verify value 'valid'
 
     We know what 'valid' ranges are for each sensor.
@@ -169,12 +169,13 @@ def is_valid(val, valid):
     Args:
         val: value to check
         valid: 'tuple' with min/max values for valid range
+        allowNone: if 'True', then skip compare if 'valid' is 'None
 
     Returns:
         'True' if value is valid, else 'False'
     """
     if valid is None or not all(valid):
-        return True
+        return allowNone
     
     if val is not None and any(valid):
         isValid = True
