@@ -1,4 +1,4 @@
-"""Test cases for f451 Labs Logger module.
+"""Test cases for f451 Labs Common Logger module.
 
 These test cases will capture stdout and verify that log 
 files are created.
@@ -10,7 +10,7 @@ Some tests are based on examples found here:
 import pytest
 import logging
 
-from src.f451_logger.logger import Logger
+from src.f451_common.logger import Logger
 
 
 # =========================================================

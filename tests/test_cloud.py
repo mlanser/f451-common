@@ -1,4 +1,4 @@
-"""Test cases for f451 Labs Cloud module.
+"""Test cases for f451 Labs Common Cloud module.
 
 Some of these test cases will send data to and/or receive 
 data from Adafruit IO and Arduino Cloud services. These 
@@ -8,12 +8,11 @@ in the 'settings.toml' file.
 
 import pytest
 import time
-import sys
 import asyncio
 from pathlib import Path
 from random import randint
 
-from src.f451_cloud.cloud import Cloud
+from src.f451_common.cloud import Cloud
 
 try:
     import tomllib
@@ -38,7 +37,7 @@ def valid_str():
 
 @pytest.fixture(scope='session')
 def config():
-    settings = 'src/f451_cloud/settings.toml'
+    settings = 'src/f451_common/settings.toml'
     try:
         with open(Path(__file__).parent.parent.joinpath(settings), mode='rb') as fp:
             config = tomllib.load(fp)
@@ -52,9 +51,7 @@ def config():
 
 @pytest.fixture(scope='session')
 def cloud(config):
-    cloud = Cloud(config)
-
-    return cloud
+    return Cloud(config)
 
 
 # =========================================================
@@ -86,7 +83,7 @@ def test_aio_create_and_delete_feed(cloud):
     #
     # NOTE: This test requires active Adafruit IO account.
     #
-    feedName = 'TEST-FEED-' + str(time.time_ns())
+    feedName = f'TEST-FEED-{str(time.time_ns())}'
 
     feedInfo = cloud.aio_create_feed(feedName)
     feedList = cloud.aio_feed_list()
@@ -105,7 +102,7 @@ def test_aio_send_and_delete_data(cloud):
     #
     # NOTE: This test requires active Adafruit IO account.
     #
-    feedName = 'TEST-FEED-' + str(time.time_ns())
+    feedName = f'TEST-FEED-{str(time.time_ns())}'
     dataPt = randint(1, 100)
 
     feedInfo = cloud.aio_create_feed(feedName)
