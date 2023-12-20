@@ -1,4 +1,4 @@
-"""f451 Labs Cloud module.
+"""f451 Labs Common Cloud module.
 
 The f451 Labs Cloud module encapsulates the Adafruit IO REST and MQTT client 
 classes, the Arduino IoT-API client class, and adds a few more features that are 

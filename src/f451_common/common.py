@@ -13,6 +13,7 @@ from datetime import datetime
 from collections import namedtuple
 from subprocess import check_output, STDOUT, DEVNULL
 from pyfiglet import Figlet
+from pathlib import Path
 
 try:
     import tomllib
@@ -514,3 +515,29 @@ def make_logo(maxWidth, appName, appVer, default=None, center=True):
         result = '\n'.join(newLogo)
 
     return result
+
+
+# =========================================================
+#                    M O D U L E   D E M O
+# =========================================================
+def main():
+    APP_DIR = Path(__file__).parent  # Find dir for this app
+    settingsFile = 'demo.toml'
+    settings = load_settings(APP_DIR.joinpath(settingsFile))
+
+    print('\n====== [Demo of f451 Labs Common module] ======\n')
+
+    print(make_logo(40, 'Test', 'v0.0.0', 'Test (v0.0.0)'))
+
+    print('\n-----------------------------------------------\n')
+
+    print(f"Reading values from '{settingsFile}' file:\n")
+    for k, v in settings.items():
+        print(f'  {k} = {v}')
+
+    print('\n=============== [End of Demo] =================\n')
+
+
+
+if __name__ == '__main__':
+    main()
