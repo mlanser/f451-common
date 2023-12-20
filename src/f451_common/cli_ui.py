@@ -472,3 +472,10 @@ class BaseUI:
     def rule(self, *args, **kwargs):
         """Wrapper for Rich 'rule' function"""
         self._console.rule(*args, **kwargs)
+
+
+# =========================================================
+#                    M O D U L E   D E M O
+# =========================================================
+if __name__ == '__main__':
+    print('MODULE DEMO')
