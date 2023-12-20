@@ -8,8 +8,10 @@ TODO:
 """
 
 import sys
+from abc import ABC, abstractmethod
+from datetime import datetime
 from collections import namedtuple
-from subprocess import check_output, STDOUT, DEVNULL  # noqa: F401
+from subprocess import check_output, STDOUT, DEVNULL
 from pyfiglet import Figlet
 
 try:
@@ -117,21 +119,36 @@ KWD_MAX_LEN_CPU_TEMPS = 'CPU_TEMPS'
 # =========================================================
 #                 H E L P E R   C L A S S
 # =========================================================
-class Runtime:
-    def __init__(self, ioFreq=0, ioDelay=0, ioWait=0, ioThrottle=0, ioRounding=0):
+class Runtime(ABC):
+    def __init__(
+        self,
+        appName,
+        appVersion,
+        appNameShort=None,
+        appLog=None,
+        appSettings=None,
+        appHost=None,
+        appDir=None,
+    ):
+        # Basic app info
+        self.appName = appName
+        self.appVersion = appVersion
+        self.appNameShort = appNameShort
+        self.appLog = appLog
+        self.appSettings = appSettings
+        self.appHost = appHost
+        self.appDir = appDir
+
         # Core settings
-        self.ioFreq = ioFreq
-        self.ioDelay = ioDelay
-        self.ioWait = ioWait
-        self.ioThrottle = ioThrottle
-        self.ioRounding = ioRounding
+        self.ioFreq = 0
+        self.ioDelay = 0
+        self.ioWait = 0
+        self.ioThrottle = 0
+        self.ioRounding = 0
         self.ioUploadAndExit = False
 
-        # Debug and log levels
-        self.logLvl = 0
-        self.debugMode = False
-
         # Core runtime variables
+        self.workStart = datetime.now()
         self.timeSinceUpdate = float(0)
         self.timeUpdate = float(0)
         self.displayUpdate = float(0)
@@ -139,14 +156,25 @@ class Runtime:
         self.maxUploads = 0
         self.numUploads = 0
 
+        # Core components
+        self.config = None
+        self.logger = None
         self.console = None
+
+        # Debug and log levels
+        self.logLvl = 0
+        self.debugMode = False
+
+    @abstractmethod
+    def init_runtime(self, *args, **kwargs):
+        pass
 
 
 # =========================================================
 #              H E L P E R   F U N C T I O N S
 # =========================================================
 def get_tri_colors(colors=None):
-    TriColor = namedtuple("TriColor", "low normal high")
+    TriColor = namedtuple('TriColor', 'low normal high')
 
     colorMap = COLOR_MAP if colors is None else colors
 
@@ -161,8 +189,8 @@ def is_valid(val, valid, allowNone=True):
     value falls within that range. Any value outside
     the range should be considered an error.
 
-    NOTE: If 'valid' is 'None' or '(None, None)', then we 
-          assume that any value is valid. However, if 
+    NOTE: If 'valid' is 'None' or '(None, None)', then we
+          assume that any value is valid. However, if
           one or both items in the 'valid' tuple are not
           'None', then we'll compare aaginst that item.
 
@@ -176,14 +204,14 @@ def is_valid(val, valid, allowNone=True):
     """
     if valid is None or not all(valid):
         return allowNone
-    
+
     if val is not None and any(valid):
         isValid = True
         if valid[0] is not None:
-            isValid &= (float(val) >= float(valid[0]))
+            isValid &= float(val) >= float(valid[0])
         if valid[1] is not None:
-            isValid &= (float(val) <= float(valid[1]))
-        
+            isValid &= float(val) <= float(valid[1])
+
         return isValid
 
     return False
@@ -192,7 +220,7 @@ def is_valid(val, valid, allowNone=True):
 def is_in_range(first, second, factor):
     """Check if 1st value is within X% of 2nd value
 
-    This method allows us to check if a value falls 
+    This method allows us to check if a value falls
     within a given range..
 
     Args:
@@ -298,7 +326,7 @@ def get_RPI_ID(prefix='', suffix='', default='n/a'):
     """
     serialNum = get_RPI_serial_num()
 
-    return f"{prefix}{serialNum}{suffix}" if serialNum else default
+    return f'{prefix}{serialNum}{suffix}' if serialNum else default
 
 
 def check_wifi():
@@ -432,7 +460,7 @@ def convert_to_bool(inVal):
     """
     if isinstance(inVal, bool):
         return inVal
-    elif isinstance(inVal, int) or isinstance(inVal, float):
+    elif isinstance(inVal, (int, float)):
         return abs(int(inVal)) > 0
     elif isinstance(inVal, str):
         return inVal.lower() in [STATUS_ON, STATUS_TRUE, STATUS_YES]
@@ -468,7 +496,7 @@ def make_logo(maxWidth, appName, appVer, default=None, center=True):
     """
     logoFont = Figlet(font='slant')
     logoStrArr = logoFont.renderText(appName).splitlines()
-    logoLen = max([len(s) for s in logoStrArr])
+    logoLen = max(len(s) for s in logoStrArr)
 
     result = default
 
