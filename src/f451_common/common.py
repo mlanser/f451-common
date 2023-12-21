@@ -15,6 +15,8 @@ from subprocess import check_output, STDOUT, DEVNULL
 from pyfiglet import Figlet
 from pathlib import Path
 
+from .colors import COLORS as RGBColors
+
 try:
     import tomllib
 except ModuleNotFoundError:
@@ -182,12 +184,15 @@ class Runtime(ABC):
 # =========================================================
 #              H E L P E R   F U N C T I O N S
 # =========================================================
-def get_tri_colors(colors=None):
+def get_tri_colors(colors=None, asRGB=False):
     TriColor = namedtuple('TriColor', 'low normal high')
 
     colorMap = COLOR_MAP if colors is None else colors
 
-    return TriColor(colorMap[COLOR_LOW], colorMap[COLOR_NORM], colorMap[COLOR_HIGH])
+    if asRGB:
+        return TriColor(RGBColors[colorMap[COLOR_LOW]], RGBColors[colorMap[COLOR_NORM]], RGBColors[colorMap[COLOR_HIGH]])
+    else:
+        return TriColor(colorMap[COLOR_LOW], colorMap[COLOR_NORM], colorMap[COLOR_HIGH])
 
 
 def is_valid(val, valid, allowNone=True):
