@@ -170,6 +170,14 @@ class Runtime(ABC):
     def init_runtime(self, *args, **kwargs):
         pass
 
+    @abstractmethod
+    def show_summary(self, *args, **kwargs):
+        pass
+
+    @abstractmethod
+    def debug(self, *args, **kwargs):
+        pass
+
 
 # =========================================================
 #              H E L P E R   F U N C T I O N S
