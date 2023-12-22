@@ -185,14 +185,39 @@ class Runtime(ABC):
 #              H E L P E R   F U N C T I O N S
 # =========================================================
 def get_tri_colors(colors=None, asRGB=False):
+    """Get low-normal-high colors
+    
+    We used this set of colors to color-code values based on
+    how they relate to data limits for a given data set.
+
+    NOTE: This function can return color values as strings (used 
+          for creating ANSI color codes), or as RGB values (as 
+          tuples) which are by Sense HAT library (and others)
+          to color a graph value, etc.
+
+    Args:
+        colors: optional set of custom colors
+        asRGB: returns RGB values instead of color names as strings
+
+    Returns:
+        TriColor (named tuple) with color names as strings or RGB values (as tuples)
+    """
     TriColor = namedtuple('TriColor', 'low normal high')
 
     colorMap = COLOR_MAP if colors is None else colors
 
     if asRGB:
-        return TriColor(RGBColors[colorMap[COLOR_LOW]], RGBColors[colorMap[COLOR_NORM]], RGBColors[colorMap[COLOR_HIGH]])
+        return TriColor(
+            RGBColors[colorMap[COLOR_LOW]],         # e.g. (255, 0, 0)
+            RGBColors[colorMap[COLOR_NORM]],
+            RGBColors[colorMap[COLOR_HIGH]],
+        )
     else:
-        return TriColor(colorMap[COLOR_LOW], colorMap[COLOR_NORM], colorMap[COLOR_HIGH])
+        return TriColor(
+            colorMap[COLOR_LOW],                    # e.g. 'red'
+            colorMap[COLOR_NORM], 
+            colorMap[COLOR_HIGH]
+        )
 
 
 def is_valid(val, valid, allowNone=True):
@@ -278,14 +303,16 @@ def get_delta_range(first, second, factor):
     if first is None or second is None:
         return 0
 
+    #fmt: off
     lower = second * (1 - factor)
     upper = second * (1 + factor)
-    if float(first) > upper:  # Above range
+    if float(first) > upper:    # Above range
         return 1
     elif float(first) < lower:  # Below range
         return -1
     else:
-        return 0  # Within range
+        return 0                # Within range
+    #fmt: on
 
 
 def load_settings(settingsFile):
@@ -348,7 +375,7 @@ def check_wifi():
 
     Based on code from Enviro+ example 'luftdaten_combined.py'
 
-    TODO: verify better way to do this
+    TODO: find better way to do this
 
     Returns:
         'True' - wi-fi confirmed
@@ -549,7 +576,6 @@ def main():
         print(f'  {k} = {v}')
 
     print('\n=============== [End of Demo] =================\n')
-
 
 
 if __name__ == '__main__':

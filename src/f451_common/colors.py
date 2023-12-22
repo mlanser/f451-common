@@ -1,6 +1,3 @@
-"""Provide RGB color constants and a colors dictionary with
-    elements formatted: colorname: CONSTANT"""
-
 """Helper module for f451 Labs applications.
 
 This module holds common RGB color definitions. Some color names

@@ -1,10 +1,14 @@
-"""f451 Labs CLI UI module.
+"""f451 Labs Common CLI UI module.
 
 This class defines and manages the layout and display of 
 data in the terminal. This is, however, not a complete TUI
 as most f451 Labs applications only collect and display data.
 
 We're using a few libraries to make this all look pretty:
+
+TODO:
+    - create more/better tests
+    - create demo for module
 
 Dependencies:
     - rich - handles UI layout, etc.
@@ -26,19 +30,10 @@ from rich.table import Table
 from sparklines import sparklines
 
 import f451_common.common as f451Common
-# import f451_sensehat.sensehat_data as f451SenseData
 
 
 __all__ = [
     'BaseUI',
-    # 'CloudError',
-    # 'KWD_AIO_ID',
-    # 'KWD_AIO_KEY',
-    # 'KWD_ARD_ID',
-    # 'KWD_ARD_KEY',
-    # 'KWD_AIO_LOC_ID',
-    # 'KWD_AIO_RWRD_ID',
-    # 'KWD_AIO_RNUM_ID',
 ]
 
 
@@ -186,6 +181,7 @@ class BaseUI:
         msg = msg if msg is not None else STATUS_LBL_WAIT
         return Status(msg, console=console, spinner='dots')
 
+    # fmt: off
     @staticmethod
     def _render_table(data, labelsOnly=False):
         """Make a new table
@@ -212,10 +208,10 @@ class BaseUI:
             decimal point.
 
             -->|        |<--
-            |12345678|
+               |12345678|
             ---|--------|---
-            |1,234.56|      <- Need min 8 char width for data values
-            |    1.23|
+               |1,234.56|      <- Need min 8 char width for data values
+               |    1.23|
 
             NOTE: We display '--' if value is 'None' and status is 'ok' 
                 as that represents a 'missing' value. But we display 
@@ -324,10 +320,9 @@ class BaseUI:
                 )
         else:
             table.add_row('', '', '')
-            table.add_row('', '', '')
-            table.add_row('', '', '')
 
         return table
+    # fmt: on
 
     def initialize(self, appNameLong, appNameShort, appVer, dataRows, enable=True):
         """Initialize main UI
@@ -414,10 +409,12 @@ class BaseUI:
         self.logo = logo
 
     def update_data(self, data):
+        """Update table with data"""
         if self._active:
             self._layout['main'].update(BaseUI._render_table(data))
 
     def update_upload_num(self, num, maxNum=0):
+        """Update 'upload' number(s)"""
         if self._active:
             maxNumStr = f"/{maxNum}" if maxNum > 0 else ''
             self._layout['actNumUpld'].update(Text(
@@ -426,6 +423,7 @@ class BaseUI:
             ))
 
     def update_upload_next(self, nextTime):
+        """Update time for next upload"""
         if self._active:
             self._layout['actNextUpld'].update(Text(
                 f"{self.statusLblNext}{self._make_time_str(nextTime)}",
@@ -433,6 +431,7 @@ class BaseUI:
             ))
 
     def update_upload_last(self, lastTime, lastStatus=STATUS_OK):
+        """Update time for last upload"""
         if self._active:
             text = Text()
             text.append(
@@ -448,17 +447,20 @@ class BaseUI:
             self._layout['actLastUpld'].update(text)
 
     def update_upload_status(self, lastTime, lastStatus, nextTime, numUploads, maxUploads=0):
+        """Update all 'status' values"""
         if self._active:
             self.update_upload_next(nextTime)
             self.update_upload_last(lastTime, lastStatus)
             self.update_upload_num(numUploads, maxUploads)
 
     def update_action(self, actMsg=None):
+        """Update current 'action' status"""
         if self._active:
             msgStr = STATUS_LBL_WAIT if actMsg is None else actMsg
             self._layout['actCurrent'].update(self._make_statusbar(self._console, msgStr))
 
     def update_progress(self, progUpdate=None, progMsg=None):
+        """Update progress basr"""
         if self._active:
             if progUpdate is None or self._progBar is None:
                 msgStr = STATUS_LBL_WAIT if progMsg is None else progMsg
