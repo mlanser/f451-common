@@ -164,6 +164,11 @@ class Runtime(ABC):
         self.logger = None
         self.console = None
 
+        # Placeholders for cloud service feeds,
+        # connected sensors, and more  
+        self.feeds = {}             
+        self.sensors = {}
+
         # Debug and log levels
         self.logLvl = 0
         self.debugMode = False
@@ -179,6 +184,12 @@ class Runtime(ABC):
     @abstractmethod
     def debug(self, *args, **kwargs):
         pass
+
+    def add_sensor(self, sensorName, sensorType, *args, **kwargs):
+        self.sensors[sensorName] = sensorType(*args, **kwargs)
+
+    def add_feed(self, feedName, feedType, *args, **kwargs):
+        self.feeds[feedName] = feedType(*args, **kwargs)
 
 
 # =========================================================
