@@ -357,12 +357,28 @@ class BaseUI:
             appVer,
         )
 
+        # fmt: off
+        # Calculate table 'size' (i.e. height in rows)
+        #
+        #  1  ---------      <-- divider
+        #  2  HEADER ROW     <-- column header         
+        #  3  ---------
+        #  4  DATA ROW 1     <-- data row 1
+        #  5  ---------
+        #  6  DATA ROW 1     <-- data row 2
+        #  7  ---------
+        #
+        #  size = (<num data rows> + <1 header row>) * 2 + 1
+        #
+        tblSize = ((len(dataRows) + 1) * 2) + 1
+        # fmt: on
+
         # If terminal window is wide enough, then split 
         # header row and show fancy logo ...
         if conWidth >= APP_2COL_MIN_WIDTH:
             self._layout.split(
-                Layout(name='header', size=logo.rows + 1),
-                Layout(name='main', size=9),
+                Layout(name='header', size=(logo.rows + 1)),
+                Layout(name='main', size=tblSize),
                 Layout(name='footer'),
             )
             self._layout['header'].split_row(
@@ -372,9 +388,9 @@ class BaseUI:
         # ... else stack all panels without fancy logo
         else:
             self._layout.split(
-                Layout(name='logo', size=logo.rows + 1, visible=(logo.rows > 1)),
+                Layout(name='logo', size=(logo.rows + 1), visible=(logo.rows > 1)),
                 Layout(name='action', size=5),
-                Layout(name='main', size=9),
+                Layout(name='main', size=tblSize),
                 Layout(name='footer'),
             )
 
