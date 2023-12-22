@@ -8,6 +8,7 @@ TODO:
 """
 
 import sys
+import argparse
 from abc import ABC, abstractmethod
 from datetime import datetime
 from collections import namedtuple
@@ -195,6 +196,52 @@ class Runtime(ABC):
 # =========================================================
 #              H E L P E R   F U N C T I O N S
 # =========================================================
+def init_cli_parser(appName, appVersion, setDefaults=True):
+    """Initialize CLI (ArgParse) parser.
+
+    Initialize the ArgParse parser with default CLI 'arguments' 
+    and return new parser instance.
+
+    Args:
+        appName: 'str' with app name
+        appVersion: 'str' with app version
+        setDefaults: 'bool' flag indicates whether to set up default CLI args
+
+    Returns:
+        ArgParse parser instance
+    """
+    # fmt: off
+    parser = argparse.ArgumentParser(
+        prog=appName,
+        description=f'{appName} [v{appVersion}] - collect internet speed test data using Speedtest CLI, and upload to Adafruit IO and/or Arduino Cloud.',
+        epilog='NOTE: This application requires active accounts with corresponding cloud services.',
+    )
+
+    if setDefaults:
+        parser.add_argument(
+            '-V',
+            '--version',
+            action='store_true',
+            help='display script version number and exit',
+        )
+        parser.add_argument(
+            '-d', 
+            '--debug', 
+            action='store_true', 
+            default=False,
+            help='run script in debug mode'
+        )
+        parser.add_argument(
+            '--log',
+            action='store',
+            type=str,
+            help='name of log file',
+        )
+
+    return parser
+    # fmt: off
+
+
 def get_tri_colors(colors=None, asRGB=False):
     """Get low-normal-high colors
     
