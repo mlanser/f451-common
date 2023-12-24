@@ -10,10 +10,9 @@ How to use:
 """
 
 import logging
-import pprint
 import json
 
-from logging import INFO
+from rich.pretty import pprint
 
 __all__ = [
     'Logger',
@@ -101,8 +100,6 @@ class Logger:
             kwargs:
                 User can provide individual settings as key-value pairs
         """
-        self._PP = pprint.PrettyPrinter(indent=4)
-
         # We combine 'args' and 'kwargs' to allow users to provide the entire
         # 'config' object and/or individual settings (which could override
         # values in 'config').
@@ -182,9 +179,9 @@ class Logger:
             strict: If 'True', then values are printed as-is
         """
         if isinstance(val, dict) and not strict:
-            self._PP.pprint(json.dumps(val, indent=4))
+            pprint(json.dumps(val, indent=4), expand_all=True)
         else:
-            self._PP.pprint(val)
+            pprint(val, expand_all=True)
 
     def log(self, msg, lvl=logging.DEBUG):
         """Log message/data
@@ -235,11 +232,11 @@ class Logger:
 # =========================================================
 if __name__ == '__main__':
     # Initialize Logger
-    logger = Logger(LOGLVL=INFO)
+    logger = Logger(LOGLVL=logging.INFO)
 
     print('\n====== [Demo of f451 Labs Logger module] ======')
     print('Showing log message:')
-    logger.log('Hello world!', INFO)
+    logger.log('Hello world!', logging.INFO)
 
     print('\nShowing PrettyPrint:')
     logger.debug('Hello world!')

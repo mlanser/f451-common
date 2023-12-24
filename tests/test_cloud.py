@@ -12,7 +12,7 @@ import asyncio
 from pathlib import Path
 from random import randint
 
-from src.f451_common.cloud import Cloud
+from src.f451_common.cloud import AdafruitCloud
 
 try:
     import tomllib
@@ -51,7 +51,7 @@ def config():
 
 @pytest.fixture(scope='session')
 def cloud(config):
-    return Cloud(config)
+    return AdafruitCloud(config)
 
 
 # =========================================================
@@ -72,9 +72,9 @@ def test_config(config):
 
 
 def test_init_aio(config):
-    cloud = Cloud(config)
+    cloud = AdafruitCloud(config)
 
-    assert cloud.aio_is_active
+    assert cloud.is_active
 
 
 @pytest.mark.online
@@ -85,13 +85,13 @@ def test_aio_create_and_delete_feed(cloud):
     #
     feedName = f'TEST-FEED-{str(time.time_ns())}'
 
-    feedInfo = cloud.aio_create_feed(feedName)
-    feedList = cloud.aio_feed_list()
+    feedInfo = cloud.create_feed(feedName)
+    feedList = cloud.feed_list()
     nameList = [feed.name for feed in feedList]
     assert feedName in nameList
 
-    cloud.aio_delete_feed(feedInfo.key)
-    feedList = cloud.aio_feed_list()
+    cloud.delete_feed(feedInfo.key)
+    feedList = cloud.feed_list()
     nameList = [feed.name for feed in feedList]
     assert feedName not in nameList
 
@@ -105,8 +105,8 @@ def test_aio_send_and_delete_data(cloud):
     feedName = f'TEST-FEED-{str(time.time_ns())}'
     dataPt = randint(1, 100)
 
-    feedInfo = cloud.aio_create_feed(feedName)
-    asyncio.run(cloud.aio_send_data(feedInfo.key, dataPt))
-    checkData = asyncio.run(cloud.aio_receive_data(feedInfo.key))
-    cloud.aio_delete_feed(feedInfo.key)
+    feedInfo = cloud.create_feed(feedName)
+    asyncio.run(cloud.send_data(feedInfo.key, dataPt))
+    checkData = asyncio.run(cloud.receive_data(feedInfo.key))
+    cloud.delete_feed(feedInfo.key)
     assert int(checkData) == dataPt

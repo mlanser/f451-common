@@ -1,0 +1,20 @@
+# =========================================================
+#          U I _ D E M O _ S E T T I N G S . T O M L
+# ---------------------------------------------------------
+# Please see README.md for instructions on how to use 
+# these settings and their effects
+# =========================================================
+
+# -- Misc. Application Defaults ---------------------------
+# - Logger -
+LOGFILE = "f451-ui-demo.log"
+LOGLVL = 30             # 10 - DEBUG, 20 - INFO, 30 - WARNING, 40 - ERROR, 50 - CRITICAL       
+
+# - Enviro -
+DISPLAY = 0             # [0..3] - default display mode
+
+# - Other -
+FREQ = 60               # Delay in seconds between uploads to cloud
+DELAY = 30              # Delay in seconds before first upload to cloud
+WAIT = 5                # Delay in seconds between sensor reads
+ROUNDING = 1            # Precision (num decimals) for uploaded data
