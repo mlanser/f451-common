@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""f451 Labs Demo application for showcasing the CLI UI module.
+"""Demo application showcasing the f451 Labs CLI UI module.
 
 This application is designed to demo core features of the CLI UI library. It simulates
 'sensor' data by generating random values and then displaying them in the terminal.
