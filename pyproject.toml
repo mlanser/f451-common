@@ -45,7 +45,7 @@ Homepage = "https://github.com/mlanser/f451-common"
 
 [project.scripts]
 f451_common = "f451_common.__main__:main"
-cli_ui = "f451_common.ui_demo:main"
+ui_demo = "f451_common.ui_demo:main"
 
 [tool.bumpver]
 current_version = "2.2.0"

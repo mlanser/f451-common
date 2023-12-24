@@ -152,11 +152,11 @@ import f451_cli_ui.cli_ui as f451CLIUI
 myVar = f451CLIUI.some_function()
 ```
 
-Please refer to the `ui_demo` application for a more extensive example of how you can use the the CLI UI library.
+Please refer to the `ui_demo` application for a more extensive example of how you can use the CLI UI library.
 
-If you have install the **f451 Labs Common** module using the `pip install` command, then you
+### UI Demo
 
-You can launch the CLI UI demo as follows:
+The **f451 Labs Common** module includes a (fairly) comprehensive CLI UI demo which you can launch as follows:
 
 ```bash
 $ python -m f451_common.ui_demo [<options>]
@@ -169,7 +169,7 @@ $ ui_demo [<options>]
 $ ui_demo -h 
 ```
 
-You can also also adjust the settings in the `ui_demo_settings.toml` file. For example, if you change the `WAIT` setting to some value greater that 1, then the UI will display a 'Waiting for sensor' progress bar. This allows us to handle scenarios where we need to wait between sensor read (e.g. waiting between running speed tests, etc.).
+You can also also adjust the settings in the `ui_demo_settings.toml` file. For example, if you change the `WAIT` setting to some value greater than 1, then the UI will display a 'Waiting for sensor' progress bar. This allows us to handle scenarios where we need to wait between sensor read (e.g. waiting between running speed tests, etc.).
 
 ```toml
 # File: ui_demo_settings.toml
@@ -182,4 +182,20 @@ Finally you can exit the application using the `ctrl-c` command. If you use the 
 
 ```bash
 $ ui_demo --uploads 10
+```
+
+## How to test
+
+The tests are written for [pytest](https://docs.pytest.org/en/7.1.x/contents.html) and we use markers to separate out tests that require the actual Sense HAT hardware. Some tests do not rely on the hardware to be prexent. However, those tests rely on the `pytest-mock` module to be present.
+
+```bash
+
+# Run all tests (except marked 'skip')
+$ pytest
+
+# Run tests with 'adafruit' marker
+$ pytest -m "adafruit"
+
+# Run tests without 'adafruit' marker
+$ pytest -m "not adafruit"
 ```
