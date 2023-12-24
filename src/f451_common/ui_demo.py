@@ -322,6 +322,17 @@ def hurry_up_and_wait(app, cliUI=False):
 
 
 def main_loop(app, data, cliUI=False):
+    """Main application loop.
+
+    This is where most of the action happens. We continously collect
+    data from our sensors, process it, display it, and upload it at
+    certain intervals.
+
+    Args:
+        app: application runtime object with config, counters, etc.
+        data: main application data queue
+        cliUI: 'bool' to indicate if we use full (console) UI
+    """
     exitNow = False
     while not exitNow:
         # fmt: off
