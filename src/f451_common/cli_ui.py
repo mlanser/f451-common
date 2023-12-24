@@ -124,6 +124,10 @@ class BaseUI:
         return self._conWidth >= APP_2COL_MIN_WIDTH
 
     @property
+    def conWidth(self):
+        return self._conWidth
+    
+    @property
     def is_active(self):
         return self._active
 
