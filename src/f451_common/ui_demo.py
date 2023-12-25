@@ -25,7 +25,6 @@ import asyncio
 import contextlib
 import platform
 
-from collections import namedtuple
 from datetime import datetime
 from pathlib import Path
 
@@ -219,6 +218,7 @@ class AppRT(f451Common.Runtime):
 
 # Define app runtime object and basic data unit
 appRT = AppRT(APP_NAME, APP_VERSION, APP_NAME_SHORT, APP_LOG, APP_SETTINGS)
+# fmt: on
 
 
 # =========================================================
