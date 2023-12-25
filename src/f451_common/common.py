@@ -9,6 +9,8 @@ TODO:
 
 import sys
 import argparse
+import random
+
 from abc import ABC, abstractmethod
 from datetime import datetime
 from collections import namedtuple
@@ -37,6 +39,7 @@ __all__ = [  # noqa: F822
     'convert_to_bool',
     'make_logo',
     'Runtime',
+    'FakeSensor',
     'COLOR_MAP',
     'COLOR_LOW',
     'COLOR_NORM',
@@ -185,6 +188,39 @@ class Runtime(ABC):
     @abstractmethod
     def debug(self, *args, **kwargs):
         pass
+
+
+class FakeSensor:
+    """Fake sensor class
+    
+    We use this class to simulate a sensor that generates some 
+    data. It's compatible with other sensor objects (e.g. SenseHat, 
+    Enviro, etc.). This makes it easier to add it as just another 
+    sensor object to the sensor list of an app object.
+    """
+    def __init__(self, *args, **kwargs):
+        self._fake = None
+
+    @staticmethod
+    def get_demo_data(limits=None, outFmt='asNamed'):
+        """Generate random data
+
+        Returns:
+            'tuple', 'dict', or 'list'
+        """
+
+        rndNum1 = random.randint(1, 200)
+        rndNum2 = random.randint(0, 100)
+
+        if outFmt == 'asList':
+            return [rndNum1, rndNum2]
+        elif outFmt == 'asDict':
+            return {'number1': rndNum1, 'number2': rndNum2}
+        elif outFmt == 'asTuple':
+            return (rndNum1, rndNum2)
+        else:
+            DataUnit = namedtuple("DataUnit", "number1 number2")
+            return DataUnit(number1=rndNum1, number2=rndNum2)
 
 
 # =========================================================
