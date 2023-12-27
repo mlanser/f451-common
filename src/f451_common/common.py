@@ -207,7 +207,7 @@ class FakeSensor:
 
         Args:
             delta: 'float' with ±% for range of values
-            default: 'float' used for testing consitent values
+            default: 'float' used for testing consistent values
             outFmt: 'str' defines output format
         Returns:
             'tuple', 'dict', or 'list'
