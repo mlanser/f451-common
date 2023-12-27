@@ -14,11 +14,6 @@ import f451_sensehat.sensehat_data as f451SenseData
 
 
 # =========================================================
-#              M I S C .   C O N S T A N T S
-# =========================================================
-
-
-# =========================================================
 #                     M A I N   C L A S S
 # =========================================================
 class DemoData:
@@ -28,7 +23,7 @@ class DemoData:
     with the 'SystemData' and 'SenseData' classes.
 
     Attributes:
-        number1: random number 
+        number1: random number
         number2: random number
 
     Methods:
@@ -45,14 +40,14 @@ class DemoData:
         Returns:
             'dict' - holds entiure data structure
         """
-        self.number1 = f451SenseData.SenseObject(
+        self.rndnum = f451SenseData.SenseObject(
             deque([defVal] * maxLen, maxlen=maxLen),
             (1, 200),  # min/max range for valid data
             'km/h',
             [None, None, None, None],
             'Demo Speed',
         )
-        self.number2 = f451SenseData.SenseObject(
+        self.rndpcnt = f451SenseData.SenseObject(
             deque([defVal] * maxLen, maxlen=maxLen),
             (0, 100),  # min/max range for valid data
             '%',
@@ -62,12 +57,12 @@ class DemoData:
 
     def as_list(self):
         return [
-            self.number1.as_dict(),
-            self.number2.as_dict(),
+            self.rndnum.as_dict(),
+            self.rndpcnt.as_dict(),
         ]
-    
+
     def as_dict(self):
         return {
-            'number1': self.number1.as_dict(),
-            'number2': self.number2.as_dict(),
+            'number1': self.rndnum.as_dict(),
+            'number2': self.rndpcnt.as_dict(),
         }

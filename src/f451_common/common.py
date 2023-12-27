@@ -202,25 +202,30 @@ class FakeSensor:
         self._fake = None
 
     @staticmethod
-    def get_demo_data(limits=None, outFmt='asNamed'):
+    def get_demo_data(delta=None, outFmt='asNamed'):
         """Generate random data
 
+        Args:
+            delta: 'float' with ±% for range of values
         Returns:
             'tuple', 'dict', or 'list'
         """
 
-        rndNum1 = random.randint(1, 200)
-        rndNum2 = random.randint(0, 100)
+        minVal = 1 if delta is None else max(1, int((1 - delta / 100) * 100))
+        maxVal = 200 if delta is None else min(200, int((1 + delta / 100) * 100))
+
+        rndNum = random.randint(minVal, maxVal) 
+        rndPcnt = random.randint(0, 100)
 
         if outFmt == 'asList':
-            return [rndNum1, rndNum2]
+            return [rndNum, rndPcnt]
         elif outFmt == 'asDict':
-            return {'number1': rndNum1, 'number2': rndNum2}
+            return {'rndnum': rndNum, 'rndpcnt': rndPcnt}
         elif outFmt == 'asTuple':
-            return (rndNum1, rndNum2)
+            return (rndNum, rndPcnt)
         else:
-            DataUnit = namedtuple("DataUnit", "number1 number2")
-            return DataUnit(number1=rndNum1, number2=rndNum2)
+            DataUnit = namedtuple("DataUnit", "rndnum rndpcnt")
+            return DataUnit(rndnum=rndNum, rndpcnt=rndPcnt)
 
 
 # =========================================================

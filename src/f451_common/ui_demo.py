@@ -54,7 +54,7 @@ APP_VERSION = '1.0.0'
 APP_NAME = 'f451 Labs - CLI UI Demo'
 APP_NAME_SHORT = 'UI Demo'
 APP_LOG = 'f451-cli-ui-demo.log'    # Individual logs for devices with multiple apps
-APP_SETTINGS = 'ui_demo_settings.toml' # Standard for all f451 Labs projects
+APP_SETTINGS = 'ui_demo_settings.toml' # Settings for demo
 
 APP_MIN_SENSOR_READ_WAIT = 1        # Min wait in sec between sensor reads
 APP_MIN_PROG_WAIT = 1               # Remaining min (loop) wait time to display prog bar
@@ -316,7 +316,7 @@ def collect_data(app, data, timeCurrent, cliUI=False):
     #
     app.update_action(cliUI, 'Reading sensors …')
 
-    newData = app.sensors['FakeSensor'].get_demo_data()
+    newData = app.sensors['FakeSensor'].get_demo_data(5)
     #
     # ----------------------
 
@@ -325,7 +325,7 @@ def collect_data(app, data, timeCurrent, cliUI=False):
         try:
             asyncio.run(
                 upload_demo_data(
-                    data=newData.number1,
+                    data=newData.rndnum,
                     deviceID=f451Common.get_RPI_ID(f451Common.DEF_ID_PREFIX),
                 )
             )
@@ -339,7 +339,7 @@ def collect_data(app, data, timeCurrent, cliUI=False):
             app.uploadDelay = app.ioFreq
             exitApp = exitApp or app.ioUploadAndExit
             app.logger.log_info(
-                 f'Uploaded: Magic #: {round(newData.number1, app.ioRounding)}'
+                 f'Uploaded: Magic #: {round(newData.rndnum, app.ioRounding)}'
             )
             app.update_upload_status(cliUI, timeCurrent, f451CLIUI.STATUS_OK)
 
@@ -349,8 +349,8 @@ def collect_data(app, data, timeCurrent, cliUI=False):
             app.update_action(cliUI, None)
 
     # Update data set and display to terminal as needed
-    data.number1.data.append(newData.number1)
-    data.number2.data.append(newData.number2)
+    data.rndnum.data.append(newData.rndnum)
+    data.rndpcnt.data.append(newData.rndpcnt)
 
     app.update_data(
         cliUI, f451CLIUI.prep_data(data.as_dict(), APP_DATA_TYPES, APP_DELTA_FACTOR)

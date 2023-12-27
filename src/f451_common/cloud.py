@@ -77,14 +77,14 @@ KWD_ARD_KEY = 'ARD_KEY'
 class AdafruitCloudError(Exception):
     """Custom exception class for Adafruit IO errors"""
 
-    def __init__(self, errMsg='Adafruit IO client not initiated'):
+    def __init__(self, errMsg='Adafruit IO client not initialized'):
         super().__init__(errMsg)
 
 
 class ArduinoCloudError(Exception):
     """Custom exception class for Arduino Cloud errors"""
 
-    def __init__(self, errMsg='Arduino Cloud client not initiated'):
+    def __init__(self, errMsg='Arduino Cloud client not initialized'):
         super().__init__(errMsg)
 
 
