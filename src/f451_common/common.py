@@ -202,19 +202,26 @@ class FakeSensor:
         self._fake = None
 
     @staticmethod
-    def get_demo_data(delta=None, outFmt='asNamed'):
+    def get_demo_data(delta=None, default=None, outFmt='asNamed'):
         """Generate random data
 
         Args:
             delta: 'float' with ±% for range of values
+            default: 'float' used for testing consitent values
+            outFmt: 'str' defines output format
         Returns:
             'tuple', 'dict', or 'list'
         """
 
-        minVal = 1 if delta is None else max(1, int((1 - delta / 100) * 100))
-        maxVal = 200 if delta is None else min(200, int((1 + delta / 100) * 100))
+        # Set or generate first fake value
+        if default is None:
+            minVal = 1 if delta is None else max(1, int((1 - delta / 100) * 100))
+            maxVal = 200 if delta is None else min(200, int((1 + delta / 100) * 100))
+            rndNum = random.randint(minVal, maxVal)
+        else:
+            rndNum = default
 
-        rndNum = random.randint(minVal, maxVal) 
+        # Generate second value
         rndPcnt = random.randint(0, 100)
 
         if outFmt == 'asList':
