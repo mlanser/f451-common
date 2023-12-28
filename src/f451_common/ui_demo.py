@@ -297,8 +297,8 @@ def init_cli_parser(appName, appVersion, setDefaults=True):
 
 def collect_data(app, data, timeCurrent, cliUI=False):
     """Collect data from sensors.
-    
-    This is core of the application where we collect data from 
+
+    This is core of the application where we collect data from
     one or more sensors, and then upload the data as needed.
 
     Args:
@@ -338,9 +338,7 @@ def collect_data(app, data, timeCurrent, cliUI=False):
             app.numUploads += 1
             app.uploadDelay = app.ioFreq
             exitApp = exitApp or app.ioUploadAndExit
-            app.logger.log_info(
-                 f'Uploaded: Magic #: {round(newData.rndnum, app.ioRounding)}'
-            )
+            app.logger.log_info(f'Uploaded: Magic #: {round(newData.rndnum, app.ioRounding)}')
             app.update_upload_status(cliUI, timeCurrent, f451CLIUI.STATUS_OK)
 
         finally:
@@ -352,9 +350,7 @@ def collect_data(app, data, timeCurrent, cliUI=False):
     data.rndnum.data.append(newData.rndnum)
     data.rndpcnt.data.append(newData.rndpcnt)
 
-    app.update_data(
-        cliUI, f451CLIUI.prep_data(data.as_dict(), APP_DATA_TYPES, APP_DELTA_FACTOR)
-    )
+    app.update_data(cliUI, f451CLIUI.prep_data(data.as_dict(), APP_DATA_TYPES, APP_DELTA_FACTOR))
 
     return exitApp
 

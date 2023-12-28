@@ -169,8 +169,8 @@ class Runtime(ABC):
         self.console = None
 
         # Placeholders for cloud service feeds,
-        # connected sensors, and more  
-        self.feeds = {}             
+        # connected sensors, and more
+        self.feeds = {}
         self.sensors = {}
 
         # Debug and log levels
@@ -192,12 +192,13 @@ class Runtime(ABC):
 
 class FakeSensor:
     """Fake sensor class
-    
-    We use this class to simulate a sensor that generates some 
-    data. It's compatible with other sensor objects (e.g. SenseHat, 
-    Enviro, etc.). This makes it easier to add it as just another 
+
+    We use this class to simulate a sensor that generates some
+    data. It's compatible with other sensor objects (e.g. SenseHat,
+    Enviro, etc.). This makes it easier to add it as just another
     sensor object to the sensor list of an app object.
     """
+
     def __init__(self, *args, **kwargs):
         self._fake = None
 
@@ -231,7 +232,7 @@ class FakeSensor:
         elif outFmt == 'asTuple':
             return (rndNum, rndPcnt)
         else:
-            DataUnit = namedtuple("DataUnit", "rndnum rndpcnt")
+            DataUnit = namedtuple('DataUnit', 'rndnum rndpcnt')
             return DataUnit(rndnum=rndNum, rndpcnt=rndPcnt)
 
 
@@ -241,7 +242,7 @@ class FakeSensor:
 def init_cli_parser(appName, appVersion, setDefaults=True):
     """Initialize CLI (ArgParse) parser.
 
-    Initialize the ArgParse parser with default CLI 'arguments' 
+    Initialize the ArgParse parser with default CLI 'arguments'
     and return new parser instance.
 
     Args:
@@ -286,12 +287,12 @@ def init_cli_parser(appName, appVersion, setDefaults=True):
 
 def get_tri_colors(colors=None, asRGB=False):
     """Get low-normal-high colors
-    
+
     We used this set of colors to color-code values based on
     how they relate to data limits for a given data set.
 
-    NOTE: This function can return color values as strings (used 
-          for creating ANSI color codes), or as RGB values (as 
+    NOTE: This function can return color values as strings (used
+          for creating ANSI color codes), or as RGB values (as
           tuples) which are by Sense HAT library (and others)
           to color a graph value, etc.
 
@@ -308,15 +309,15 @@ def get_tri_colors(colors=None, asRGB=False):
 
     if asRGB:
         return TriColor(
-            RGBColors[colorMap[COLOR_LOW]],         # e.g. (255, 0, 0)
+            RGBColors[colorMap[COLOR_LOW]],  # e.g. (255, 0, 0)
             RGBColors[colorMap[COLOR_NORM]],
             RGBColors[colorMap[COLOR_HIGH]],
         )
     else:
         return TriColor(
-            colorMap[COLOR_LOW],                    # e.g. 'red'
-            colorMap[COLOR_NORM], 
-            colorMap[COLOR_HIGH]
+            colorMap[COLOR_LOW],  # e.g. 'red'
+            colorMap[COLOR_NORM],
+            colorMap[COLOR_HIGH],
         )
 
 
@@ -403,7 +404,7 @@ def get_delta_range(first, second, factor):
     if first is None or second is None:
         return 0
 
-    #fmt: off
+    # fmt: off
     lower = second * (1 - factor)
     upper = second * (1 + factor)
     if float(first) > upper:    # Above range
@@ -412,7 +413,7 @@ def get_delta_range(first, second, factor):
         return -1
     else:
         return 0                # Within range
-    #fmt: on
+    # fmt: on
 
 
 def load_settings(settingsFile):

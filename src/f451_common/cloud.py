@@ -6,6 +6,8 @@ commonly used in f451 Labs projects.
 
 TODO:
     - update module demo
+    - add Arduino Cloud code
+    - more tests
 
 Dependencies:
     - random
@@ -54,8 +56,6 @@ __all__ = [
     'KWD_AIO_RWRD_ID',
     'KWD_AIO_RNUM_ID',
 ]
-
-from rich.pretty import pprint
 
 
 # =========================================================
@@ -435,10 +435,11 @@ class AdafruitCloud(CloudService):
 
 class AdafruitFeed(Feed):
     """Adafruit IO Feed class
-    
+
     This wrapper calss allows us to standardize function
     signatures for similar features across cloud services.
     """
+
     def __init__(self, service, feed, active=True):
         super().__init__(service, feed, active)
 

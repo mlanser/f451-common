@@ -378,10 +378,8 @@ class BaseUI:
         on each update so that we get that real-time update feel.
 
         Args:
-            data:
-                'list' of data rows, each with a specific data set render
-            labelsOnly:
-                'bool' if 'True' then we only render labels and no data
+            data: 'list' of data rows, each with a specific data set render
+            labelsOnly: 'bool' if 'True' then we only render labels and no data
 
         Returns:
             'Table' with data
@@ -408,10 +406,8 @@ class BaseUI:
                 as gaps in sparkline graph.   
             
             Args:
-                data:
-                    'dict' with data point value and attributes
-                labelsOnly:
-                    'bool' if 'True' then we do not generate 'current value' string
+                data: 'dict' with data point value and attributes
+                labelsOnly: 'bool' if 'True' then we do not generate 'current value' string
 
             Returns:
                 'Text' object with formatted 'current value'
@@ -445,10 +441,8 @@ class BaseUI:
                 codes when used with 'termcolors' library.
 
             Args:
-                data:
-                    'dict' with data point value and attributes
-                labelsOnly:
-                    'bool' if 'True' then we do not generate 'current value' string
+                data: 'dict' with data point value and attributes
+                labelsOnly: 'bool' if 'True' then we do not generate 'current value' string
 
             Returns:
                 'Text' object with formatted 'current value'
