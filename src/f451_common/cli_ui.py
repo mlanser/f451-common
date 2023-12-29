@@ -7,13 +7,13 @@ as most f451 Labs applications only collect and display data.
 We're using a few libraries to make this all look pretty:
 
 TODO:
-    - create more/better tests
-    - create demo for module
+ - create more/better tests
+ - create demo for module
 
 Dependencies:
-    - rich - handles UI layout, etc.
-    - sparklines - display real-time-ish data as sparklines
-    - termcolor - adds colors to sparklines 
+ - rich - handles UI layout, etc.
+ - sparklines - display real-time-ish data as sparklines
+ - termcolor - adds colors to sparklines 
 """
 
 import time

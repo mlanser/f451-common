@@ -5,19 +5,19 @@ classes, the Arduino IoT-API client class, and adds a few more features that are
 commonly used in f451 Labs projects.
 
 TODO:
-    - update module demo
-    - add Arduino Cloud code
-    - more tests
+ - update module demo
+ - add Arduino Cloud code
+ - more tests
 
 Dependencies:
-    - random
-    - oauthlib
-    - tomllib / tomli
-    - arduino-iot-client
-    - requests-authlib
-    - adafruit-io
-    - typing-extensions < Python 3.10
-    - frozendict
+ - random
+ - oauthlib
+ - tomllib / tomli
+ - arduino-iot-client
+ - requests-authlib
+ - adafruit-io
+ - typing-extensions < Python 3.10
+ - frozendict
 """
 
 import json

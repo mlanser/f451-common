@@ -4,7 +4,7 @@ This module holds common helper functions and constants
 that can be used across most/all f451 Labs applications.
 
 TODO:
- - how to get 'hostname' for device we're running on
+ - add more/better tests
 """
 
 import sys

@@ -7,6 +7,9 @@ commonly used in f451 Labs projects.
 How to use:
     logger = Logger()
     logger = Logger(logLvl=logging.ERROR, logFile="path/to/mylogfile.log")
+
+TODO:
+ - add more/better tests
 """
 
 import logging

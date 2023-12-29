@@ -16,7 +16,8 @@ this application as follows:
 NOTE: This application will NOT upload any data to the cloud.
 
 TODO:
-    - add more demo data feeds
+ - add more demo data feeds
+ - add more/better tests
 """
 
 import time
@@ -76,6 +77,20 @@ class AppRT(f451Common.Runtime):
             Path(__file__).parent   # Find dir for this app
         )
         
+    def _init_log_settings(self, cliArgs):
+        """Helper for setting logger settings"""
+        if cliArgs.debug:
+            self.logLvl = f451Logger.LOG_DEBUG
+            self.debugMode = True
+        else:
+            self.logLvl = self.config.get(f451Logger.KWD_LOG_LEVEL, f451Logger.LOG_NOTSET)
+            self.debugMode = (self.logLvl == f451Logger.LOG_DEBUG)
+
+        self.logger.set_log_level(self.logLvl)
+
+        if cliArgs.log is not None:
+            self.logger.set_log_file(appRT.logLvl, cliArgs.log)
+
     def init_runtime(self, cliArgs, data):
         """Initialize the 'runtime' variable
         
@@ -100,17 +115,7 @@ class AppRT(f451Common.Runtime):
         self.ioUploadAndExit = False
 
         # Update log file or level?
-        if cliArgs.debug:
-            self.logLvl = f451Logger.LOG_DEBUG
-            self.debugMode = True
-        else:
-            self.logLvl = self.config.get(f451Logger.KWD_LOG_LEVEL, f451Logger.LOG_NOTSET)
-            self.debugMode = (self.logLvl == f451Logger.LOG_DEBUG)
-
-        self.logger.set_log_level(self.logLvl)
-
-        if cliArgs.log is not None:
-            self.logger.set_log_file(appRT.logLvl, cliArgs.log)
+        self._init_log_settings(cliArgs)
 
         # Initialize various counters, etc.
         self.timeSinceUpdate = float(0)
