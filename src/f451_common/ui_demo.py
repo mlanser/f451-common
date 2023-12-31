@@ -18,6 +18,9 @@ NOTE: This application will NOT upload any data to the cloud.
 TODO:
  - add more demo data feeds
  - add more/better tests
+
+Dependencies:
+ - rich - for console output
 """
 
 import time
@@ -63,9 +66,18 @@ APP_WAIT_1SEC = 1
 APP_MAX_DATA = 120                  # Max number of data points in the queue
 APP_DELTA_FACTOR = 0.02             # Any change within X% is considered negligable
 
-APP_DATA_TYPES = ['number1', 'number2']
+APP_DATA_TYPES = [
+    const.KWD_DATA_RNDNUM,
+    const.KWD_DATA_RNDPCNT,
+]
 
 class AppRT(f451Common.Runtime):
+    """Application runtime object.
+    
+    We use this object to store/manage configuration and any other variables
+    required to run this application as object attributes. This allows us to
+    have fewer global variables.
+    """
     def __init__(self, appName, appVersion, appNameShort=None, appLog=None, appSettings=None):
         super().__init__(
             appName, 
@@ -320,7 +332,6 @@ def collect_data(app, data, timeCurrent, cliUI=False):
     # --- Get magic data ---
     #
     app.update_action(cliUI, 'Reading sensors …')
-
     newData = app.sensors['FakeSensor'].get_demo_data(5)
     #
     # ----------------------
@@ -417,9 +428,6 @@ def main(cliArgs=None):
     main application loop.
 
     NOTE:
-     -  Application will exit with error level 1 if invalid Adafruit IO
-        or Arduino Cloud feeds are provided
-
      -  Application will exit with error level 0 if either no arguments
         are entered via CLI, or if arguments '-V' or '--version' are used.
         No data will be uploaded will be sent in that case.

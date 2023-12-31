@@ -62,6 +62,7 @@ push = false
 [tool.bumpver.file_patterns]
 "pyproject.toml" = ['current_version = "{version}"']
 "src/f451_common/__init__.py" = ["__version__ = '{version}'"]
+"src/f451_common/ui_demo.py" = ["APP_VERSION = '{version}'"]
 "README.md" = ['v{version}$']
 
 [tool.ruff]

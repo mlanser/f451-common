@@ -11,7 +11,7 @@ This module consists of the following cor components:
 
 ## Install
 
-This module is not (yet) available on PyPi. however, you can still use `pip` to install the module directly from Github (see below).
+This module is not (yet) available on PyPi. However, you can still use `pip` to install the module directly from Github (see below).
 
 ### Dependencies
 
