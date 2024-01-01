@@ -12,7 +12,7 @@ This module consists of the following core components:
 
 ## Install
 
-This module is not (yet) available on PyPi. However, you can still use `pip` to install the module directly from Github (see below).
+This module is not (yet) available on PyPi. However, you can still use `pip` to install the module directly from GitHub (see below).
 
 ### Dependencies
 
@@ -32,9 +32,9 @@ This module is dependent on the following libraries:
 - [sparklines](https://pypi.org/project/sparklines/)
 - [termcolor](https://pypi.org/project/termcolor/) to color Sparkline graphs
 
-### Installing from Github using `pip`
+### Installing from GitHub using `pip`
 
-You can use `pip install` to install this module directly from Github as follows:
+You can use `pip install` to install this module directly from GitHub as follows:
 
 ```bash
 $ pip install 'f451-common @ git+https://github.com/mlanser/f451-common.git'
