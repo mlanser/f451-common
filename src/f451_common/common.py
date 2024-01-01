@@ -26,6 +26,7 @@ except ModuleNotFoundError:
     import tomli as tomllib
 
 __all__ = [  # noqa: F822
+    'init_cli_parser',
     'is_valid',
     'is_in_range',
     'get_delta_range',
@@ -361,7 +362,7 @@ def is_in_range(first, second, factor):
     """Check if 1st value is within X% of 2nd value
 
     This method allows us to check if a value falls
-    within a given range..
+    within a given range.
 
     Args:
         first: value to compare

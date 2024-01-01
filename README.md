@@ -2,12 +2,13 @@
 
 ## Overview
 
-This module consists of the following cor components:
+This module consists of the following core components:
 
-- **Common** — contains functions, variables, and constants that are common for most/all *f451 Labs* projects.
-- **Cloud** — encapsulates the *Adafruit IO* REST and MQTT clients, as well as the *Arduino Cloud* client in wrapper classes. Most *f451 Labs* projects upload to and/or receive data from one or both of these services, and these wrappers simplifies these tasks by standardizing send and receive methods, and so on. The module also includes helper classes for handling cloud service feeds.
-- **Logger** — encapsulates the default Python `Logging` class and adds a few more features that are commonly used in *f451 Labs* projects.
 - **CLI UI** — contains functions, variables, and constants that can be used to create common UI elements for *f451 Labs* projects.
+- **Cloud** — encapsulates the *Adafruit IO* REST and MQTT clients, as well as the *Arduino Cloud* client in wrapper classes. Most *f451 Labs* projects upload to and/or receive data from one or both of these services, and these wrappers simplifies these tasks by standardizing send and receive methods, and so on. The module also includes helper classes for handling cloud service feeds.
+- **Colors** — includes RGB values for tons of colors
+- **Common** — contains functions, variables, and constants that are common for most/all *f451 Labs* projects.
+- **Logger** — encapsulates the default Python `Logging` class and adds a few more features that are commonly used in *f451 Labs* projects.
 
 ## Install
 
@@ -57,42 +58,49 @@ import f451_common.common as f451Common
 myVar = f451Common.some_function()
 ```
 
-#### Core functions
+#### Core classes & functions
 
+- **init_cli_parser()** — Initialize the ArgParse parser with default CLI arguments.
+- **is_valid()** — Verify that a given (sensor) value falls within a known valid absolute range.
+- **is_in_range()** — Verify that a given (sensor) value falls within X% of a known valid range.
+- **get_delta_range()** — Determine a given (sensor) value is above, below, or within a known range.
+- **get_tri_colors()** — Get low-normal-high colors from a color map for a given sensor value.
 - **load_settings()** — Initialize TOML parser and load settings file.
 - **get_RPI_serial_num()** — Get Raspberry Pi serial number.
 - **get_RPI_ID()** — Get Raspberry Pi ID. Also allows for additional pre- and/or suffix.
 - **check_wifi()** — Check for Wi-Fi connection on Raspberry Pi.
 - **num_to_range()** — Map numeric value to range.
 - **convert_to_rgb()** — Map numeric value to RGB.
-- **convert_to_bool()** — Convert value to boolean. Mainly used for config strings (e.g. "yes", "true", "on", etc.)
+- **convert_to_bool()** — Convert value to boolean. Mainly used for config strings (e.g. "yes", "true", "on", etc.).
 - **make_logo()** — Create fancy logo for CLI apps. This function uses the 'pyfiglet' library and the 'slant' font to create multi-line ASCII-art logos ... you're welcome! 🤓
+- **Runtime** — Helper class for creating a global application runtime object.
+- **FakeSensor** — Helper class for creating fake 'sensors' for testing, etc.
 
 ### Cloud module
 
-To use thios module you must have accounts with Adafruit IO and/or Aduino Cloud. This module creates
+To use this module you must have accounts with Adafruit IO and/or Arduino Cloud. This module creates
 objects that make it easier to send data to and receive data from these services.
 
 Simply `import` it the module into your code and instantiate the `AdafruitCloud` and/or `ArduinoCloud` object which you can then use throughout your code. You can also instantiate 'feed' objects for either service.
 
 ```Python
 # Import f451 Labs Cloud
-from f451_cloud.cloud import Cloud
+from f451_common.cloud import AdafruitCloud
 
 # Initialize 'Cloud'
-myCloud = Cloud(
+myPuffyCloud = AdafruitCloud(
     AIO_ID = "<ADAFRUIT IO USERNAME>", 
     AIO_KEY = "<ADAFRUIT IO KEY>"
 )
 
 # Create an Adafruit IO feed
-feed = myCloud.aio_create_feed('my-new-feed')
+feed = myPuffyCloud.create_feed('my-new-feed')
 
 # Upload data to Adafruit IO feed
-asyncio.run(myCloud.aio_send_data(feed.key, randint(1, 100)))
+asyncio.run(myPuffyCloud.send_data(feed.key, randint(1, 100)))
 
 # Receiving latest data from Adafruit IO feed
-data = asyncio.run(myCloud.aio_receive_data(feed.key, True))
+data = asyncio.run(myPuffyCloud.receive_data(feed.key, True))
 
 # Adafruit IO returns data in form of 'namedtuple' and we can 
 # use the '_asdict()' method to convert it to regular 'dict'.
@@ -102,13 +110,19 @@ pretty = json.dumps(data._asdict(), indent=4, sort_keys=True)
 print(pretty)
 ```
 
+#### Core classes & functions
+
+- **AdafruitCloud** — Main class for interacting with [Adafruit IO](https://io.adafruit.com) cloud service.
+- **AdafruitFeed** — Helper class for managing Adafruit IO feeds.
+- **AdafruitCloudError** — Helper class for managing IO errors related to Adafruit IO cloud service.
+
 ### Logger module
 
 To use this module, you `import` it into your code and instantiate a `Logger` object which you can then use throughout your code.
 
 ```Python
 # Import f451 Labs Logger
-from f451_logger.logger import Logger
+from f451_common.logger import Logger
 
 # This is optional, but useful if you want to 
 # use predefined constant for logging levels
@@ -134,6 +148,10 @@ myVar = 2
 myLogger.debug(myVar)
 ```
 
+#### Core classes & functions
+
+- **Logger** — Main class for creating a `logger` object.
+
 ### CLI UI
 
 This module is quite complex in that it can create fairly advanced UIs for *f451 Labs* projects with only a few lines of code. Of course, this requires some set-up and is not easily shown in a small expample.
@@ -142,17 +160,35 @@ In general, though, this module follows the same usage pattern as the other comp
 
 ```Python
 # Import specific components from the f451 Labs CLI UI module
-from f451_cli_ui.cli_ui import some_function, some_variable, some_constant
+from f451_common.cli_ui import some_function, some_variable, some_constant
 
 myVar = some_function()
 
 # Import all components from the f451 Labs CLI UI module
-import f451_cli_ui.cli_ui as f451CLIUI
+import f451_common.cli_ui as f451CLIUI
 
 myVar = f451CLIUI.some_function()
 ```
 
 Please refer to the `ui_demo` application for a more extensive example of how you can use the CLI UI library.
+
+#### Core classes & functions
+
+- **prep_data()** — Helper function to prep/format data for display via BasUI object.
+- **BaseUI** — Helper class for creating a terminbal UI with a logo, 'actions' section, and data table.
+- **Logo** — Helper class for creating fancy logos 🤓
+
+### Colors
+
+This module is very simple as its only purpose is to define a `dict` with a (long) list of color names and their corresponding RBG values as a `tuple` (e.g. `(0,0,0)` for black).
+
+```Python
+# Import COLORS
+from f451_common.colors import COLORS
+
+blackRBG = COLORS['black']
+fancyBlueRBG = COLORS['cornflowerblue']
+```
 
 ### UI Demo
 
