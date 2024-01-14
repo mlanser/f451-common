@@ -355,7 +355,7 @@ def collect_data(app, data, timeCurrent, cliUI=False):
             app.uploadDelay = app.ioFreq
             exitApp = exitApp or app.ioUploadAndExit
             app.logger.log_info(f'Uploaded: Magic #: {round(newData.rndnum, app.ioRounding)}')
-            app.update_upload_status(cliUI, timeCurrent, f451CLIUI.STATUS_OK)
+            app.update_upload_status(cliUI, timeCurrent, f451CLIUI.HTTP_STATUS_OK)
 
         finally:
             app.timeUpdate = timeCurrent

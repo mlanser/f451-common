@@ -49,7 +49,7 @@ APP_MIN_CLI_HEIGHT = 10     # Min terminal window height (in rows)
 
 APP_DELTA_FACTOR = 0.02     # Any change within X% is considered negligable
 
-STATUS_OK = 200
+HTTP_STATUS_OK = 200
 
 STATUS_LBL_NEXT = 'Next:  '
 STATUS_LBL_LAST = 'Last:  '
@@ -628,7 +628,7 @@ class BaseUI:
                 style=COLOR_DEF
             ))
 
-    def update_upload_last(self, lastTime, lastStatus=STATUS_OK):
+    def update_upload_last(self, lastTime, lastStatus=HTTP_STATUS_OK):
         """Update time for last upload"""
         if self._active:
             text = Text()
@@ -637,7 +637,7 @@ class BaseUI:
                 style=COLOR_DEF
             )
 
-            if lastStatus == STATUS_OK:
+            if lastStatus == HTTP_STATUS_OK:
                 text.append('[OK]', style=COLOR_OK)
             else:
                 text.append('[Error]', style=COLOR_ERROR)
