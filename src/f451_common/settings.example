@@ -14,6 +14,10 @@ AIO_LOC_ID = "<ADAFRUIT IO Weather Location ID>"
 AIO_RWRD_ID = "<ADAFRUIT IO Random Word ID>"
 AIO_RNUM_ID = "<ADAFRUIT IO Random Number ID>"
 
+# -- Google Cloud Service Account -------------------------
+GOOGLE_SA = "<Google Service Account info JSON file>"
+SPREADSHEET = "<Name of Google spreadsheet>"
+WORKSHEET = "<Name of default worksheet>"
 
 # -- Arduino Cloud ----------------------------------------
 ARD_ID = "<ARDUINO CLOUD ID>"
