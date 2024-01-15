@@ -161,9 +161,9 @@ class AdafruitCloud(CloudService):
     settings which could override the values in the 'config' object.
 
     Example:
-        myCloud = Cloud(config)           # Use values from 'config'
-        myCloud = Cloud(key=val)          # Use val
-        myCloud = Cloud(config, key=val)  # Use values from 'config' and also use 'val'
+        myCloud = AdafruitCloud(config)           # Use values from 'config'
+        myCloud = AdafruitCloud(key=val)          # Use val
+        myCloud = AdafruitCloud(config, key=val)  # Use values from 'config' and also use 'val'
 
     Attributes:
         AIO_USERNAME:   Adafruit IO username
@@ -472,9 +472,9 @@ class ArduinoCloud(CloudService):
     settings which could override the values in the 'config' object.
 
     Example:
-        myCloud = Cloud(config)           # Use values from 'config'
-        myCloud = Cloud(key=val)          # Use val
-        myCloud = Cloud(config, key=val)  # Use values from 'config' and also use 'val'
+        myCloud = ArduinoCloud(config)           # Use values from 'config'
+        myCloud = ArduinoCloud(key=val)          # Use val
+        myCloud = ArduinoCloud(config, key=val)  # Use values from 'config' and also use 'val'
 
 
     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -526,12 +526,14 @@ if __name__ == '__main__':
         with open(Path(__file__).parent.joinpath('settings.toml'), mode='rb') as fp:
             config = tomllib.load(fp)
     except (FileNotFoundError, tomllib.TOMLDecodeError):
+        # fmt: off
         config = {
-            'AIO_ID': None,  # Set your 'ADAFRUIT IO USERNAME'
-            'AIO_KEY': None,  # set your 'ADAFRUIT IO KEY'
-            'AIO_LOC_ID': None,  # set your 'ADAFRUIT IO Weather Location ID'
+            'AIO_ID': None,         # Set your 'ADAFRUIT IO USERNAME'
+            'AIO_KEY': None,        # set your 'ADAFRUIT IO KEY'
+            'AIO_LOC_ID': None,     # set your 'ADAFRUIT IO Weather Location ID'
         }
-
+        # fmt: on
+        
     # Check for creds
     if not config.get('AIO_ID') or not config.get('AIO_KEY'):
         sys.exit('ERROR: Missing Adafruit IO credentials')

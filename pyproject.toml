@@ -26,6 +26,7 @@ dependencies = [
     "rich",
     "termcolor",
     "sparklines",
+    "gspread",
 ]
 requires-python = ">=3.9"
 dynamic = ["version"]
